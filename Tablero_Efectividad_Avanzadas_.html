@@ -1,0 +1,1628 @@
+<html lang="es"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claro Colombia | Control Gerencial de Avanzadas</title>
+    <!-- SheetJS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --red: #da291c;
+            --red-dark: #b40012;
+            --ink: #111827;
+            --muted: #64748b;
+            --line: #cbd5e1;
+            --dark-bg: #1a1a1a;
+            --sidebar-width: 260px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+
+        body {
+            background: #f1f5f9;
+            color: var(--ink);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR LATERAL NAVEGACIÓN --- */
+        #sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid #333;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 2px solid var(--red);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #111111;
+        }
+
+        .claro-badge-icon {
+            background: var(--red);
+            color: #fff;
+            font-weight: 900;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(218,41,28,0.4);
+        }
+
+        .sidebar-header h2 { font-size: 14px; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; }
+        .sidebar-header span { font-size: 10.5px; color: #a1a1aa; display: block; text-transform: uppercase; font-weight: 800; }
+
+        .nav-section-title {
+            padding: 16px 20px 8px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #71717a;
+            letter-spacing: 1px;
+        }
+
+        .nav-list { list-style: none; padding: 0 12px; flex-grow: 1; overflow-y: auto; }
+        .nav-item { margin-bottom: 6px; }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 12.5px;
+            font-weight: 800;
+            gap: 12px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .nav-link i { font-size: 15px; width: 20px; text-align: center; }
+
+        /* --- ÁREA PRINCIPAL --- */
+        #main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #f8fafc;
+            position: relative;
+        }
+
+        .top-banner {
+            background: var(--dark-bg);
+            color: #ffffff;
+            padding: 14px 28px;
+            border-bottom: 3px solid var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-title h1 { font-size: 17px; font-weight: 900; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px; }
+        .top-title p { font-size: 11.5px; color: #a1a1aa; font-weight: 600; margin-top: 2px; }
+
+        .upload-container {
+            padding: 60px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        .upload-card {
+            background: #ffffff;
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 620px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .upload-card:hover { border-color: var(--red); background: #fff5f5; transform: translateY(-2px); }
+
+        .upload-icon {
+            width: 80px;
+            height: 80px;
+            background: #e0f2fe;
+            color: #0284c7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 20px;
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: #ffffff;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+        }
+
+        #file-input { display: none; }
+
+        .view-body {
+            padding: 22px 26px;
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .dash-grid-master { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+
+        .dash-card-box {
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            font-size: 11px;
+            flex: 1;
+            min-width: 220px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dash-card-box:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+
+        .dash-card-header {
+            background: #000000;
+            color: #ffffff;
+            text-align: center;
+            font-weight: 800;
+            padding: 8px;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        .bg-green-kpi { background: #bbf7d0 !important; color: #064e3b !important; font-weight: 900 !important; }
+        .bg-yellow-kpi { background: #fef08a !important; color: #713f12 !important; font-weight: 900 !important; }
+        .bg-pink-kpi { background: #fce7f3 !important; color: #831843 !important; font-weight: 900 !important; }
+
+        .val-giant { font-size: 32px; font-weight: 900; line-height: 1; text-align: center; vertical-align: middle; }
+
+        .panel-box { background: #ffffff; border-radius: 16px; border: 1px solid var(--line); padding: 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); }
+        .panel-title { font-size: 15px; font-weight: 900; text-transform: uppercase; color: #0f172a; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+
+        .table-custom { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .table-custom th { background: var(--dark-bg); color: #ffffff; padding: 12px 14px; font-weight: 800; text-align: center; text-transform: uppercase; font-size: 11px; }
+        .table-custom td { padding: 10px 12px; border: 1px solid #cbd5e1; text-align: center; font-weight: 600; }
+        .table-clickable tbody tr { cursor: pointer; transition: background 0.15s; }
+        .table-clickable tbody tr:hover { background: #e0f2fe !important; }
+
+        .claro-footer {
+            position: fixed;
+            bottom: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            height: 36px;
+            background: var(--red);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 11px;
+            z-index: 90;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- MENÚ LATERAL -->
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <div class="claro-badge-icon">Claro</div>
+            <div>
+                <h2>CONTROL AVANZADAS</h2>
+                <span>Gerencia de Soluciones</span>
+            </div>
+        </div>
+
+        <div class="nav-section-title">Módulos del Proyecto</div>
+        <ul class="nav-list" id="primary-nav">
+            <li class="nav-item">
+                <a class="nav-link active" data-sheet="AVANZADAS">
+                    <i class="fa-solid fa-clipboard-user"></i>
+                    <span>EFECTIVIDAD AVANZADAS</span>
+                </a>
+            </li>
+        </ul>
+        <div style="padding: 16px; border-top: 1px solid #333; margin-top: auto;">
+            <button onclick="downloadSelfHTML()" class="btn-upload" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #7c3aed, #5b21b6); padding: 11px 12px; font-size: 12px; border-radius: 10px; font-weight:800;">
+                <i class="fa-solid fa-download"></i> Descargar HTML Interactivo
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div id="main-content">
+        <div class="top-banner">
+            <div class="top-title">
+                <h1 id="active-sheet-title">TABLERO GERENCIAL DE EFECTIVIDAD DE AVANZADAS</h1>
+                <p>Haga clic en cualquier Regional (R1 a R5), Mes, Cliente o Aliado para filtrar en tiempo real</p>
+            </div>
+        </div>
+
+        <!-- PANTALLA DE CARGA EXCEL -->
+        <div class="upload-container hidden" id="upload-section">
+            <div class="upload-card" onclick="triggerFileInput()">
+                <div class="upload-icon"><i class="fa-solid fa-file-excel"></i></div>
+                <h3 style="font-size: 20px; font-weight: 900; color: #0f172a;">Cargar Archivo Excel de Avanzadas</h3>
+                <p style="margin: 12px 0 28px; color: #64748b; font-size: 13.5px; line-height: 1.5;">
+                    Haga clic aquí para seleccionar el archivo Excel con los reportes de avanzadas de los técnicos.
+                </p>
+                <button class="btn-upload"><i class="fa-solid fa-folder-open"></i> Seleccionar Libro Excel</button>
+            </div>
+            <input type="file" id="file-input" accept=".xlsx, .xls, .xlsb" onchange="handleFileSelect(event)">
+        </div>
+
+        <!-- VISTA PRINCIPAL: EFECTIVIDAD AVANZADAS -->
+        <div class="view-body" id="view-avanzadas">
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                
+                <!-- Tarjetas KPI Interactivas -->
+                <div class="dash-grid-master">
+                    <div class="dash-card-box" onclick="filterByKpi('ALL')">
+                        <div class="dash-card-header">TOTAL AVANZADAS (VER TODO)</div>
+                        <div style="padding: 16px; text-align: center;" class="val-giant" id="adv-total">63</div>
+                    </div>
+                    <div class="dash-card-box" onclick="filterByKpi('SI')">
+                        <div class="dash-card-header">PERMISOS APROBADOS (SI) 🖱️</div>
+                        <div style="padding: 16px; text-align: center;" class="val-giant bg-green-kpi" id="adv-si">39</div>
+                    </div>
+                    <div class="dash-card-box" onclick="filterByKpi('NO')">
+                        <div class="dash-card-header">SIN PERMISOS / ALERTAS (NO) 🖱️</div>
+                        <div style="padding: 16px; text-align: center;" class="val-giant bg-pink-kpi" id="adv-no">24</div>
+                    </div>
+                    <div class="dash-card-box">
+                        <div class="dash-card-header">EFECTIVIDAD GLOBAL</div>
+                        <div style="padding: 16px; text-align: center;" class="val-giant bg-yellow-kpi" id="adv-efect">62%</div>
+                    </div>
+                </div>
+
+                <!-- REPORTE INTERACTIVO POR REGIONAL (R1 A R5) -->
+                <div class="panel-box">
+                    <div class="panel-title">
+                        <span><i class="fa-solid fa-map-location-dot" style="color: var(--red);"></i> Reporte y Efectividad por Regional (R1 a R5) — Clic para Filtrar Reunión</span>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="table-custom table-clickable" id="table-regionales-conteo">
+                            <thead>
+                                <tr style="background: #000; color: #fff;">
+                                    <th>REGIONAL</th>
+                                    <th>TOTAL VISITAS</th>
+                                    <th>PERMISOS APROBADOS (SI)</th>
+                                    <th>CON NOVEDAD (NO)</th>
+                                    <th>% EFECTIVIDAD REGIONAL</th>
+                                </tr>
+                            </thead>
+                            <tbody><tr onclick="filterBy('regional', 'R1 - COSTA')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-solid fa-map-pin" style="color:var(--red);"></i> R1 - COSTA</td>
+                    <td><b>4</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">4</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('regional', 'R2 - ANTIOQUIA')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-solid fa-map-pin" style="color:var(--red);"></i> R2 - ANTIOQUIA</td>
+                    <td><b>10</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">9</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">10%</span></td>
+                </tr><tr onclick="filterBy('regional', 'R3 - OCCIDENTE')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-solid fa-map-pin" style="color:var(--red);"></i> R3 - OCCIDENTE</td>
+                    <td><b>0</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('regional', 'R4 - CENTRO')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-solid fa-map-pin" style="color:var(--red);"></i> R4 - CENTRO</td>
+                    <td><b>18</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">12</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">6</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">67%</span></td>
+                </tr><tr onclick="filterBy('regional', 'R5 - ORIENTE')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-solid fa-map-pin" style="color:var(--red);"></i> R5 - ORIENTE</td>
+                    <td><b>30</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">25</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">5</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">83%</span></td>
+                </tr></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tabla Conteo por Mes (Interactiva) -->
+                <div class="panel-box">
+                    <div class="panel-title">
+                        <span><i class="fa-solid fa-calendar-days" style="color: var(--red);"></i> Volumen de Avanzadas Realizadas por Mes (Haga clic para filtrar)</span>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="table-custom table-clickable" id="table-meses-conteo">
+                            <thead>
+                                <tr style="background: #000; color: #fff;">
+                                    <th>MES / PERIODO</th>
+                                    <th>TOTAL AVANZADAS</th>
+                                    <th>PERMISOS APROBADOS (SI)</th>
+                                    <th>CON NOVEDAD (NO)</th>
+                                    <th>% EFECTIVIDAD MENSUAL</th>
+                                </tr>
+                            </thead>
+                            <tbody><tr onclick="filterBy('mes', 'Julio 2026')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-regular fa-calendar-days" style="color:var(--red);"></i> Julio 2026</td>
+                    <td><b>11</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">4</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">7</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">36%</span></td>
+                </tr><tr onclick="filterBy('mes', 'Junio 2026')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-regular fa-calendar-days" style="color:var(--red);"></i> Junio 2026</td>
+                    <td><b>14</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">11</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">3</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">79%</span></td>
+                </tr><tr onclick="filterBy('mes', 'Mayo 2026')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-regular fa-calendar-days" style="color:var(--red);"></i> Mayo 2026</td>
+                    <td><b>35</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">22</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">13</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">63%</span></td>
+                </tr><tr onclick="filterBy('mes', 'abr 29, 2026')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-regular fa-calendar-days" style="color:var(--red);"></i> abr 29, 2026</td>
+                    <td><b>2</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">2</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('mes', 'abr 28, 2026')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-regular fa-calendar-days" style="color:var(--red);"></i> abr 28, 2026</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tabla Conteo por Cliente (Interactiva) -->
+                <div class="panel-box">
+                    <div class="panel-title">
+                        <span><i class="fa-solid fa-building-user" style="color: var(--red);"></i> Conteo de Avanzadas por Cliente / Proyecto (Haga clic para filtrar)</span>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="table-custom table-clickable" id="table-clientes-conteo">
+                            <thead>
+                                <tr style="background: #000; color: #fff;">
+                                    <th>CLIENTE / CUENTA</th>
+                                    <th>TOTAL AVANZADAS</th>
+                                    <th>PERMISOS APROBADOS (SI)</th>
+                                    <th>CON NOVEDAD / RECHAZO (NO)</th>
+                                    <th>% CUMPLIMIENTO</th>
+                                </tr>
+                            </thead>
+                            <tbody><tr onclick="filterBy('cliente', 'ARCOS DORADOS COLOMBIA S.A.S.')">
+                    <td style="text-align:left; font-weight:800;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>16</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">12</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">4</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">75%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'STF GROUP S.A.')">
+                    <td style="text-align:left; font-weight:800;">STF GROUP S.A.</td>
+                    <td><b>3</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">3</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'CUEROS VELEZ S.A.S.')">
+                    <td style="text-align:left; font-weight:800;">CUEROS VELEZ S.A.S.</td>
+                    <td><b>2</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">50%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'BANCO DAVIVIENDA S.A.')">
+                    <td style="text-align:left; font-weight:800;">BANCO DAVIVIENDA S.A.</td>
+                    <td><b>2</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">50%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'COLOMBIANA DE COMERCIO SA')">
+                    <td style="text-align:left; font-weight:800;">COLOMBIANA DE COMERCIO SA</td>
+                    <td><b>2</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">2</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'CINE COLOMBIA S.A.S.')">
+                    <td style="text-align:left; font-weight:800;">CINE COLOMBIA S.A.S.</td>
+                    <td><b>2</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">2</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'VISION MP.SAS COMERCIAL')">
+                    <td style="text-align:left; font-weight:800;">VISION MP.SAS COMERCIAL</td>
+                    <td><b>2</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">2</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'SPORTS GLOBAL BRANDS S.A.S')">
+                    <td style="text-align:left; font-weight:800;">SPORTS GLOBAL BRANDS S.A.S</td>
+                    <td><b>2</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">2</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'GOU PAYMENTS S.A EASPBV')">
+                    <td style="text-align:left; font-weight:800;">GOU PAYMENTS S.A EASPBV</td>
+                    <td><b>2</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">50%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'GRUPO LA COMARCA S.A.S.')">
+                    <td style="text-align:left; font-weight:800;">GRUPO LA COMARCA S.A.S.</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'LEVI STRAUSS COLOMBIA SAS')">
+                    <td style="text-align:left; font-weight:800;">LEVI STRAUSS COLOMBIA SAS</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'BANCO DE BOGOTA')">
+                    <td style="text-align:left; font-weight:800;">BANCO DE BOGOTA</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'WINNER GROUP S.A')">
+                    <td style="text-align:left; font-weight:800;">WINNER GROUP S.A</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'UNIDAD NACIONAL DE PROTECCION')">
+                    <td style="text-align:left; font-weight:800;">UNIDAD NACIONAL DE PROTECCION</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'OTRO')">
+                    <td style="text-align:left; font-weight:800;">OTRO</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'UTILITIES INC. S.A.S. E.S.P')">
+                    <td style="text-align:left; font-weight:800;">UTILITIES INC. S.A.S. E.S.P</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'MAPFRE SEGUROS GENERALES DE COLOMBIA')">
+                    <td style="text-align:left; font-weight:800;">MAPFRE SEGUROS GENERALES DE COLOMBIA</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'M M PETUNIA S A S')">
+                    <td style="text-align:left; font-weight:800;">M M PETUNIA S A S</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'VICMAN SERVICES S.A.S')">
+                    <td style="text-align:left; font-weight:800;">VICMAN SERVICES S.A.S</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'ROSA EVELIA BUITRAGO DAZA')">
+                    <td style="text-align:left; font-weight:800;">ROSA EVELIA BUITRAGO DAZA</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'FOOD FRAME SAS')">
+                    <td style="text-align:left; font-weight:800;">FOOD FRAME SAS</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'FABRICA DE BRASIERES HABY SA')">
+                    <td style="text-align:left; font-weight:800;">FABRICA DE BRASIERES HABY SA</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'NICKI&nbsp; SAS')">
+                    <td style="text-align:left; font-weight:800;">NICKI&nbsp; SAS</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'DISTR IVAN MONCADA')">
+                    <td style="text-align:left; font-weight:800;">DISTR IVAN MONCADA</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'A G STORE EU')">
+                    <td style="text-align:left; font-weight:800;">A G STORE EU</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'OBSTETRICIA &amp; GINECOLOGIA SAS')">
+                    <td style="text-align:left; font-weight:800;">OBSTETRICIA &amp; GINECOLOGIA SAS</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'IECO S.A')">
+                    <td style="text-align:left; font-weight:800;">IECO S.A</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'MERCADOLIB RE COLOMBIA LTDA')">
+                    <td style="text-align:left; font-weight:800;">MERCADOLIB RE COLOMBIA LTDA</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'COMCEL')">
+                    <td style="text-align:left; font-weight:800;">COMCEL</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'OPTICAS VARGAS LTDA')">
+                    <td style="text-align:left; font-weight:800;">OPTICAS VARGAS LTDA</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'TELEDATOS')">
+                    <td style="text-align:left; font-weight:800;">TELEDATOS</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'ELCK -ELC-ÉXITO MATUNA - CDP')">
+                    <td style="text-align:left; font-weight:800;">ELCK -ELC-ÉXITO MATUNA - CDP</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'ARCOS DORADO S.A')">
+                    <td style="text-align:left; font-weight:800;">ARCOS DORADO S.A</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'MACDONALS')">
+                    <td style="text-align:left; font-weight:800;">MACDONALS</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'PASTEUR')">
+                    <td style="text-align:left; font-weight:800;">PASTEUR</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'HELADOS MISMOS')">
+                    <td style="text-align:left; font-weight:800;">HELADOS MISMOS</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'SR WOK')">
+                    <td style="text-align:left; font-weight:800;">SR WOK</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'AGENCIA DE DESARROLLO RURAL - ADR')">
+                    <td style="text-align:left; font-weight:800;">AGENCIA DE DESARROLLO RURAL - ADR</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('cliente', 'ACOMODIN SAS')">
+                    <td style="text-align:left; font-weight:800;">ACOMODIN SAS</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tabla Desempeño por Aliado (Interactiva) -->
+                <div class="panel-box">
+                    <div class="panel-title">
+                        <span><i class="fa-solid fa-chart-bar" style="color: var(--red);"></i> Desempeño de Avanzadas por Aliado (Haga clic para filtrar)</span>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="table-custom table-clickable" id="table-aliados-resumen">
+                            <thead>
+                                <tr style="background: #000; color: #fff;">
+                                    <th>ALIADO / CONTRATISTA</th>
+                                    <th>TOTAL AVANZADAS</th>
+                                    <th>PERMISOS APROBADOS (SI)</th>
+                                    <th>CON NOVEDAD / RECHAZO (NO)</th>
+                                    <th>% EFECTIVIDAD</th>
+                                </tr>
+                            </thead>
+                            <tbody><tr onclick="filterBy('aliado', 'TELCOS INGENIERÍA')">
+                    <td style="text-align:left; font-weight:800;">TELCOS INGENIERÍA</td>
+                    <td><b>39</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">31</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">8</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">79%</span></td>
+                </tr><tr onclick="filterBy('aliado', 'CINCO')">
+                    <td style="text-align:left; font-weight:800;">CINCO</td>
+                    <td><b>6</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">5</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">17%</span></td>
+                </tr><tr onclick="filterBy('aliado', 'SICTE')">
+                    <td style="text-align:left; font-weight:800;">SICTE</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">1</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('aliado', 'TABASCO OC')">
+                    <td style="text-align:left; font-weight:800;">TABASCO OC</td>
+                    <td><b>5</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">3</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">2</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">60%</span></td>
+                </tr><tr onclick="filterBy('aliado', 'TAB')">
+                    <td style="text-align:left; font-weight:800;">TAB</td>
+                    <td><b>1</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">1</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('aliado', 'TERCOS ING')">
+                    <td style="text-align:left; font-weight:800;">TERCOS ING</td>
+                    <td><b>3</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">3</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">0</span></td>
+                    <td><span style="font-weight:900; color:#16a34a;">100%</span></td>
+                </tr><tr onclick="filterBy('aliado', 'INMEL')">
+                    <td style="text-align:left; font-weight:800;">INMEL</td>
+                    <td><b>4</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">4</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr><tr onclick="filterBy('aliado', 'DOMINION')">
+                    <td style="text-align:left; font-weight:800;">DOMINION</td>
+                    <td><b>4</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">0</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">4</span></td>
+                    <td><span style="font-weight:900; color:#da291c;">0%</span></td>
+                </tr></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tabla Detalle Completo -->
+                <div class="panel-box">
+                    <div class="panel-title">
+                        <span id="detalle-titulo">Detalle de Avanzadas (Mostrando Todos los Registros - 63 registros)</span>
+                        <button onclick="resetFilters()" class="btn-upload" style="padding: 6px 14px; font-size: 11px;">
+                            <i class="fa-solid fa-rotate-left"></i> Mostrar Todos
+                        </button>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="table-custom" id="table-avanzadas-detalle">
+                            <thead>
+                                <tr style="background: var(--dark-bg); color: #fff;">
+                                    <th>FECHA</th>
+                                    <th>ALIADO</th>
+                                    <th>CLIENTE</th>
+                                    <th>REGIONAL</th>
+                                    <th>CIUDAD</th>
+                                    <th>PERMISOS OK?</th>
+                                    <th>OBSERVACIONES / MOTIVO NOVEDAD</th>
+                                </tr>
+                            </thead>
+                            <tbody><tr>
+                    <td>jul 22, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">GRUPO LA COMARCA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>VILLAVICENCIO</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se confirma actividad</td>
+                </tr><tr>
+                    <td>jul 22, 2026</td>
+                    <td><b>CINCO</b></td>
+                    <td style="text-align:left;">CUEROS VELEZ S.A.S.</td>
+                    <td><b>R2 - ANTIOQUIA</b></td>
+                    <td>SABANETA</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">-</td>
+                </tr><tr>
+                    <td>jul 22, 2026</td>
+                    <td><b>CINCO</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R2 - ANTIOQUIA</b></td>
+                    <td>ENVIGADO</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">-</td>
+                </tr><tr>
+                    <td>jul 21, 2026</td>
+                    <td><b>SICTE</b></td>
+                    <td style="text-align:left;">BANCO DAVIVIENDA S.A.</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>Bogotá</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Sin autorización sin correos</td>
+                </tr><tr>
+                    <td>jul 21, 2026</td>
+                    <td><b>CINCO</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R2 - ANTIOQUIA</b></td>
+                    <td>Medellin</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">-</td>
+                </tr><tr>
+                    <td>jul 21, 2026</td>
+                    <td><b>CINCO</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R2 - ANTIOQUIA</b></td>
+                    <td>Medellin</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">-</td>
+                </tr><tr>
+                    <td>jul 16, 2026</td>
+                    <td><b>CINCO</b></td>
+                    <td style="text-align:left;">LEVI STRAUSS COLOMBIA SAS</td>
+                    <td><b>R2 - ANTIOQUIA</b></td>
+                    <td>Medellin</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">-</td>
+                </tr><tr>
+                    <td>jul 16, 2026</td>
+                    <td><b>CINCO</b></td>
+                    <td style="text-align:left;">BANCO DE BOGOTA</td>
+                    <td><b>R2 - ANTIOQUIA</b></td>
+                    <td>Medellin</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">-</td>
+                </tr><tr>
+                    <td>jul 8, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">COLOMBIANA DE COMERCIO SA</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>bucaramanga</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento en el Centro Comercial Único, donde nos atiende la señora Carolina, quien confirma que los permisos para la ejecución de las actividades programadas para el día de mañana se encuentran aprobados. Con esta validación, se cuenta con la autorización correspondiente para realizar los trabajos según lo programado.</td>
+                </tr><tr>
+                    <td>jul 5, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">WINNER GROUP S.A</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>FLORIDABLANCA</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento com el centro comercial se validando permisos de ingreso se habla con el area administrador del centro comercial se valida permisos se evidencia que pasaron listados de técnicos erróneos se habla cln el nivel 1. El señor Leonardo reyes  se le pasa listado de técnicos actualizados en indica que se van a enviar al clinete para el tramite y autorización</td>
+                </tr><tr>
+                    <td>jul 2, 2026</td>
+                    <td><b>TABASCO OC</b></td>
+                    <td style="text-align:left;">STF GROUP S.A.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>BARRANCABERMEJA</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Cliente indica que sin correo del área de redes de autorización, no permiten el ingreso, y la tienda la abren a las 09:30am</td>
+                </tr><tr>
+                    <td>jun 30, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">STF GROUP S.A.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>Villavicencio</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se llega al sitio y se valida con el señor Jhon Martinez cel 3126950935 administrador de la tienda, quien indica que no se a enviado correo por parte de Claro para realizar alguna actividad en el local, aclara que el correo se tiene que enviar 24 horas antes de cualquier actividad para poder gestionar los permisos ante el centro comercial. Se envía la invitación al supervisor Oscar Zavala quien válida la información</td>
+                </tr><tr>
+                    <td>jun 25, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">STF GROUP S.A.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>BUCARAMANGA</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento se habla con personal de seguridad indica que no hay correos por parte del cliente. Se realiza a escalamiento se habla con la administración del local el cual indica que no tiene conocimiento de la actividad se llama al n1 José luis rangel indica que se va enviar el correo al cliente. Pero que se debe ingresar como al centro comercial como cliente y la apertura de la tienda es a las 10 am</td>
+                </tr><tr>
+                    <td>jun 22, 2026</td>
+                    <td><b>TABASCO OC</b></td>
+                    <td style="text-align:left;">UNIDAD NACIONAL DE PROTECCION</td>
+                    <td><b>SIN REGIONAL</b></td>
+                    <td>Barrancabermeja</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza avanzada a las 04:00 pm, se pone horario de 08:15 pm, ya que no estaba la opción de la hora en que se llega.</td>
+                </tr><tr>
+                    <td>jun 22, 2026</td>
+                    <td><b>TAB</b></td>
+                    <td style="text-align:left;">COLOMBIANA DE COMERCIO SA</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>Piedecuesta</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza avance gestión de permiso de trabajo para el día de mañana 23 de junio del 2026 dentro del cliente</td>
+                </tr><tr>
+                    <td>jun 22, 2026</td>
+                    <td><b>TABASCO OC</b></td>
+                    <td style="text-align:left;">OTRO</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>-</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">-</td>
+                </tr><tr>
+                    <td>jun 13, 2026</td>
+                    <td><b>TABASCO OC</b></td>
+                    <td style="text-align:left;">CUEROS VELEZ S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>bucaramanga</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">-</td>
+                </tr><tr>
+                    <td>jun 10, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">BANCO DAVIVIENDA S.A.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>BUCARAMANGA</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento al sitio y se establece comunicación con el coordinador logístico del centro comercial, Miguel Reyes, quien informa que no se cuenta con permisos ni autorización para el ingreso del personal técnico. Posteriormente, se contacta al coordinador de Nivel 1, Heiner, quien indica que tiene programada una reunión con el cliente a las 4:00 p. m. del día de hoy, en la cual se gestionará el envío de los correos y permisos correspondientes para la ejecución de la actividad el día de mañana. Informa que si no dejan ingresar que ingresen como cliente ya que la actividad va ser dentro del local</td>
+                </tr><tr>
+                    <td>jun 9, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>bucaramanga</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento al centro comercial y se habla con el administrador del local, señor oscar ruiz, quien informa que ya fue enviado el correo de confirmación para la actividad programada para el día de mañana. Posteriormente, se valida con el área logística del centro comercial, a través del señor Miguel Reyes, quien confirma que los permisos se encuentran aprobados y en orden para la ejecución de la actividad. nota señor oscar indica que si llegan a poner problema para el ingreso fovor llamarlo</td>
+                </tr><tr>
+                    <td>jun 9, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>bucaramanga</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento al centro comercial y se habla con el administrador del local, señor Dubán, quien informa que ya fue enviado el correo de confirmación para la actividad programada para el día de mañana. Posteriormente, se valida con el área logística del centro comercial, a través del señor Miguel Reyes, quien confirma que los permisos se encuentran aprobados y en orden para la ejecución de la actividad</td>
+                </tr><tr>
+                    <td>jun 4, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">CINE COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>BUCARAMANGA</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento al centro comercial se habla con la señora maira asistente de de  cine colombian el cual indica q se pasaron permisos y se encuentra ok</td>
+                </tr><tr>
+                    <td>jun 3, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>Bucaramanga</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento al centro comercial y se validan los permisos, los cuales se encuentran aprobados. Se establece comunicación con el personal logístico y de mantenimiento, el señor Miguel Reyes, quien confirma la autorización para realizar las actividades programadas.</td>
+                </tr><tr>
+                    <td>jun 3, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>Bucaramanga</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento al centro comercial y se validan los permisos, los cuales se encuentran aprobados. Se establece comunicación con el personal logístico y de mantenimiento, el señor Miguel Reyes, quien confirma la autorización para realizar las actividades programadas.</td>
+                </tr><tr>
+                    <td>jun 3, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>Bucaramanga</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento al centro comercial y se validan los permisos, los cuales se encuentran aprobados. Se establece comunicación con el personal logístico y de mantenimiento, el señor Miguel Reyes, quien confirma la autorización para realizar las actividades programadas.</td>
+                </tr><tr>
+                    <td>jun 3, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>Bucaramanga</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento al centro comercial y se validan los permisos, los cuales se encuentran aprobados. Se establece comunicación con el personal logístico y de mantenimiento, el señor Miguel Reyes, quien confirma la autorización para realizar las actividades programadas.</td>
+                </tr><tr>
+                    <td>may 28, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">UTILITIES INC. S.A.S. E.S.P</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>Bogotá</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">-</td>
+                </tr><tr>
+                    <td>may 26, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>BUCARAMANGA</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se llega al sitio, se verifica la dirección y se habla con la administrador de la Barbuja de McDonald’s, quienes informan que el correo ya fue enviado. Se hace acercamiento a la administración del Centro Comercial Único confirman que los permisos para mañana están aprobados por la señora, Carolina de SST aprueba los permisos.</td>
+                </tr><tr>
+                    <td>may 26, 2026</td>
+                    <td><b>TERCOS ING</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>BUCARAMANGA</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento y se habla con la cliente de McDonald's, Juliana Mariño. Se validan permisos con el centro comercial, los cuales son confirmados como OK por el señor Miguel Reyes. Coordinador logístico</td>
+                </tr><tr>
+                    <td>may 26, 2026</td>
+                    <td><b>TERCOS ING</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>BUCARAMANGA</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento y se habla con la cliente de McDonald's, Juliana Mariño. Se validan permisos con el centro comercial, los cuales son confirmados como OK por el señor Miguel Reyes. Coordinador logístico del centro comercial</td>
+                </tr><tr>
+                    <td>may 26, 2026</td>
+                    <td><b>TERCOS ING</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>BUCARAMANGA</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento y se habla con la cliente de McDonald's, Juliana Mariño. Se validan permisos con el centro comercial, los cuales son confirmados como OK por el señor Miguel Reyes. Coordinar logístico del centro comercial</td>
+                </tr><tr>
+                    <td>may 26, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">MAPFRE SEGUROS GENERALES DE COLOMBIA</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>Cucuta</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza avanzada para entrega de servicios</td>
+                </tr><tr>
+                    <td>may 25, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">M M PETUNIA S A S</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>Bogotá</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Q el envargado no está y q tienen q enviar solicitud pero no me dieron información</td>
+                </tr><tr>
+                    <td>may 25, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">VISION MP.SAS COMERCIAL</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>Bogota</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">25 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Yesica colorado correo littlemicensueno@gmail.com teléfono 3122284042</td>
+                </tr><tr>
+                    <td>may 25, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">VISION MP.SAS COMERCIAL</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>Bogota</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">25 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Valentina Martinez correo micensueno@gmail.com teléfono 3105680021</td>
+                </tr><tr>
+                    <td>may 25, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">VICMAN SERVICES S.A.S</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>Bogota</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">25 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Laura Mendoza correo Digital.ensueno@holdingvml.net teléfono 3016077956</td>
+                </tr><tr>
+                    <td>may 25, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">ROSA EVELIA BUITRAGO DAZA</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>Bogota</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">25 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Yeison amado correo yeison.barreneche19@gmail.com teléfono 3196243834</td>
+                </tr><tr>
+                    <td>may 22, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">FOOD FRAME SAS</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>540: Soacha | Cundinamarca</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">22 de mayo el personal dice que si es posible realizar la migración que ellos piden permisos con el centro comercial administración local  Ana correo anabarbosa0831@gmail.com teléfono 3102189677</td>
+                </tr><tr>
+                    <td>may 22, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">FABRICA DE BRASIERES HABY SA</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>540: Soacha | Cundinamarca</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">22 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración María Angélica Escobar correo granplazasoacha@haby.com.co teléfono 8400132</td>
+                </tr><tr>
+                    <td>may 22, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">NICKI&nbsp; SAS</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>540: Soacha | Cundinamarca</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">22 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración  Luis pulgare correo no hay teléfono 3108872729</td>
+                </tr><tr>
+                    <td>may 22, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">DISTR IVAN MONCADA</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>540: Soacha | Cundinamarca</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">22 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Laura Rodríguez correo granplazasoacha@trendyshop.com.co teléfono 303089293</td>
+                </tr><tr>
+                    <td>may 22, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">A G STORE EU</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>540: Soacha | Cundinamarca</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">22 de mayo el personal dice que si es posible realizar la migración que ellos piden permisos con el centro comercial administración local  Ana correo anabarbosa0831@gmail.com teléfono 3102189677</td>
+                </tr><tr>
+                    <td>may 22, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">OBSTETRICIA &amp; GINECOLOGIA SAS</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>540: Soacha | Cundinamarca</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">22 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos con el centro comercial diana Castañeda correo recepción.soacha@oyg.com.co teléfono no manejan.</td>
+                </tr><tr>
+                    <td>may 22, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">SPORTS GLOBAL BRANDS S.A.S</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>540: Soacha | Cundinamarca</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">22 de mayo el personal dice que si es posible realizar la migración que ellos piden permisos con el centro comercial administración local Julieth Ovalle correo odontólogia@adonsalud.com.co teléfono 3144830458</td>
+                </tr><tr>
+                    <td>may 22, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">IECO S.A</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>Soacha</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">22 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Santiago barreto correo coordinación.sur@iecu.com.co teléfono 3125403303</td>
+                </tr><tr>
+                    <td>may 22, 2026</td>
+                    <td><b>TABASCO OC</b></td>
+                    <td style="text-align:left;">MERCADOLIB RE COLOMBIA LTDA</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>GIRON</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se validan permisos de ingresos ok con personal de seguridad no administran números de contactos ya que solo se suministra ingreso con correos enviados desde la sede principal del cliente</td>
+                </tr><tr>
+                    <td>may 21, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">COMCEL</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>540: Soacha | Cundinamarca</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">fecha 21 de mayo el señor administrador edilson Gonzáles dice que si necesitan la migración de las redes que ya han escalado el caso pero no les han dado respuesta se les deja la información y dicen que van hablar con el personal de migraciones para que se pueda realizar el trabajo correo hernando.gonzales@claro.com.co teléfono 3102751491</td>
+                </tr><tr>
+                    <td>may 21, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">OPTICAS VARGAS LTDA</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>Soacha</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">en el local la señorita Natalia Hernández dice que le gustaría migrar la red gpon que tienen actualmente que no hay problema solo que le indiquen la hora y fecha para sacar los permisos</td>
+                </tr><tr>
+                    <td>may 21, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">SPORTS GLOBAL BRANDS S.A.S</td>
+                    <td><b>R4 - CENTRO</b></td>
+                    <td>Soacha</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">el cliente el administrador del punto dice que si le interesa cambiar a fttx pero que va hablar con el jefe para poder realizar los permisos de hablo con el señor Edgar José que está en la tienda</td>
+                </tr><tr>
+                    <td>may 20, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">TELEDATOS</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>FLORIDABLANCA</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento se valida permisos con el señor Miguel blanco rodriguez indican que se encuentran ok. Se debe enviar listado de equipos electrónicos previamente con serial equipos no adjuntos en el listado no se le dará ingreso al edificio se debe realizar curso logisto para ingreso a la zona franca</td>
+                </tr><tr>
+                    <td>may 20, 2026</td>
+                    <td><b>INMEL</b></td>
+                    <td style="text-align:left;">ELCK -ELC-ÉXITO MATUNA - CDP</td>
+                    <td><b>R1 - COSTA</b></td>
+                    <td>CARTAGENA</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">-</td>
+                </tr><tr>
+                    <td>may 19, 2026</td>
+                    <td><b>INMEL</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R1 - COSTA</b></td>
+                    <td>BARRANQUILLA</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Horarios para realizar actividades de 6am a 8 am es en mismo horario</td>
+                </tr><tr>
+                    <td>may 19, 2026</td>
+                    <td><b>INMEL</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R1 - COSTA</b></td>
+                    <td>Barranquilla</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Horarios para realizar actividades de 6am a 8 am en almacén exito y en el C.Comercial Buena vista es en mismo horario</td>
+                </tr><tr>
+                    <td>may 19, 2026</td>
+                    <td><b>INMEL</b></td>
+                    <td style="text-align:left;">ARCOS DORADO S.A</td>
+                    <td><b>R1 - COSTA</b></td>
+                    <td>BARRANQUILLA</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">-</td>
+                </tr><tr>
+                    <td>may 16, 2026</td>
+                    <td><b>DOMINION</b></td>
+                    <td style="text-align:left;">MACDONALS</td>
+                    <td><b>R2 - ANTIOQUIA</b></td>
+                    <td>Medellín</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Local apertura a las 9 am, se realiza avanzada sin visita técnica ya que no se agendó y cliente no tenía conocimiento, actividad, se el dan indicaciones al cliente para solictud de permisos, N1 indica que solo es recopilacion de datos para coordinar trabajos con el éxito, persona que atiende en sitio Lina Hernández</td>
+                </tr><tr>
+                    <td>may 13, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">ARCOS DORADOS COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>BUCARAMANGA</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza avanzada para ingreso a realizar instalacion de fibra óptica para la borbuja B102 el cual se validan permisos con personal HSQ del centro comercial el cual quedan autorizados</td>
+                </tr><tr>
+                    <td>may 13, 2026</td>
+                    <td><b>DOMINION</b></td>
+                    <td style="text-align:left;">PASTEUR</td>
+                    <td><b>R2 - ANTIOQUIA</b></td>
+                    <td>Medellín</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se le indica al cliente que debe gestionar permisos ante administracion, se suministran fotos de lonque se evidencian en el cliente, cliente solicita que el equipo quede dentro del Rack, informar al cliente con tiempo para que tenga en personal en sitio para que atienda a los técnicos</td>
+                </tr><tr>
+                    <td>may 13, 2026</td>
+                    <td><b>DOMINION</b></td>
+                    <td style="text-align:left;">HELADOS MISMOS</td>
+                    <td><b>R2 - ANTIOQUIA</b></td>
+                    <td>-</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Solo se realiza levantamiento de información directamente en el local ya que no se cuenta con personal de mtto para suministrar informaciónmas completa en cuanto a la ruta, la burbuja cuenta con un ducto que baja del cielo falso pero no se logra evidenciar que tipo de acometida es ya que llega al cielo falso de la burbuja se recomienda contactar al cliente antes de agendar instalacion que nos apoye con la solicitud de permisos, por el momento</td>
+                </tr><tr>
+                    <td>may 12, 2026</td>
+                    <td><b>DOMINION</b></td>
+                    <td style="text-align:left;">SR WOK</td>
+                    <td><b>R2 - ANTIOQUIA</b></td>
+                    <td>Medellín</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se queda a la espera que el cliente solicite permisos ante la admin por medio de mantum, se el indica al cliente que se le da hasta el viernes de la semana en curso para realizar dicho trámite</td>
+                </tr><tr>
+                    <td>may 11, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">CINE COLOMBIA S.A.S.</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>VILLAVICENCIO</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">N/A</td>
+                </tr><tr>
+                    <td>may 4, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">GOU PAYMENTS S.A EASPBV</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>BUCARAMANGA</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Se realiza acercamiento con el personal de seguridad el cual hace escalamiento con el personal de logístico de copetran para Validación de ingreso a la sede el cual indica quebya están autorizados se habla con la ingeniería karol rueda el cual autoriza el ingresó para el dia de mañana</td>
+                </tr><tr>
+                    <td>abr 29, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">AGENCIA DE DESARROLLO RURAL - ADR</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>Villavicencio</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">La señorita administradora no nos respondió para solicitar el correo, no se cuenta con personal fijo de mantenimiento para el edificio y el señor guarda no maneja correo electrónico</td>
+                </tr><tr>
+                    <td>abr 29, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">ACOMODIN SAS</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>VILLAVICENCIO</td>
+                    <td><span style="color:#16a34a; font-weight:900;">SI</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">Trabajo dentro del Rack, debido a que no se va a realizar labores en zonas comunes por parte del centro comercial no se requiere ningún tipo de trabajo especial, informa administradora de la tienda y guarda de seguridad Bochica.</td>
+                </tr><tr>
+                    <td>abr 28, 2026</td>
+                    <td><b>TELCOS INGENIERÍA</b></td>
+                    <td style="text-align:left;">GOU PAYMENTS S.A EASPBV</td>
+                    <td><b>R5 - ORIENTE</b></td>
+                    <td>Villavicencio</td>
+                    <td><span style="color:#da291c; font-weight:900;">NO</span></td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">No hay permisos confirmados con el centro comercial para la actividad, administración indica que no reconoce el local/isla con nombre GOU PAYMENTS S.A EASPBV Isla cajero 1105, indica enviar correo informando que cajero es para ubicarlo y validar permisos, no tiene correo para la actividad.</td>
+                </tr></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="claro-footer">
+            <span>GERENCIA IMPLEMENTACIÓN SOLUCIONES GOBIERNO</span>
+            <span>CONTROL DE AVANZADAS · CLARO COLOMBIA 2026</span>
+        </div>
+    </div>
+
+    <script>
+        let workbookRaw = {};
+        let globalRecords = [];
+
+        function safeSetText(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = text;
+        }
+
+        function triggerFileInput() { document.getElementById('file-input').click(); }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const data = new Uint8Array(evt.target.result);
+                    const wb = XLSX.read(data, { type: 'array' });
+                    
+                    workbookRaw = {};
+                    wb.SheetNames.forEach(name => {
+                        workbookRaw[name.trim()] = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: "" });
+                    });
+
+                    document.getElementById('upload-section').classList.add('hidden');
+                    switchNav('AVANZADAS');
+                    processAvanzadasData();
+                } catch (err) {
+                    alert("Error al procesar el archivo Excel: " + err.message);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function extractMonthYear(dateVal) {
+            if (!dateVal) return "Sin Fecha";
+            let str = String(dateVal).trim();
+            let d = new Date(str);
+            if (isNaN(d.getTime()) && typeof dateVal === 'number') {
+                d = new Date(Math.round((dateVal - 25569) * 86400 * 1000));
+            }
+            if (!isNaN(d.getTime())) {
+                const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+                return `${meses[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+            }
+            let lower = str.toLowerCase();
+            if (lower.includes('jul')) return "Julio 2026";
+            if (lower.includes('jun')) return "Junio 2026";
+            if (lower.includes('may')) return "Mayo 2026";
+            if (lower.includes('ago')) return "Agosto 2026";
+            return str.substring(0, 15) || "General";
+        }
+
+        function processAvanzadasData() {
+            let sheetKey = Object.keys(workbookRaw).find(s => workbookRaw[s].length > 1);
+            if (!sheetKey) return;
+
+            const rows = workbookRaw[sheetKey];
+            if (!rows || rows.length < 2) return;
+
+            const headers = rows[0].map(h => String(h).trim());
+            
+            const idxAliado = headers.findIndex(h => h.toUpperCase().includes('ALIADO'));
+            const idxFecha = headers.findIndex(h => h.toUpperCase().includes('FECHA AVANZADA') || h.toUpperCase().includes('SUBMISSION'));
+            const idxCliente = headers.findIndex(h => h.toUpperCase().includes('CLIENTE'));
+            
+            // Búsqueda exacta de la columna Reqgional (Columna J en tu Excel)
+            const idxRegional = headers.findIndex(h => h.toUpperCase().includes('REQGINAL') || h.toUpperCase().includes('REGIONAL') || h.toUpperCase().includes('REGGIONAL'));
+            
+            const idxCiudad = headers.findIndex(h => h.toUpperCase().includes('CIUDAD'));
+            const idxPermisos = headers.findIndex(h => h.toUpperCase().includes('PERMISOS PARA LA ACTIVIDAD'));
+            const idxObs = headers.findIndex(h => h.toUpperCase().includes('EXPLIQUE') || h.toUpperCase().includes('OBSERVACIONES'));
+
+            globalRecords = [];
+
+            for (let i = 1; i < rows.length; i++) {
+                const r = rows[i];
+                if (!r || r.length === 0) continue;
+
+                const aliado = idxAliado !== -1 ? String(r[idxAliado] || 'GENERAL').trim() : 'GENERAL';
+                const fechaRaw = idxFecha !== -1 ? r[idxFecha] : '';
+                const fechaClean = parseExcelDateClean(fechaRaw);
+                const mesAnio = extractMonthYear(fechaRaw);
+
+                let cliente = idxCliente !== -1 ? String(r[idxCliente] || 'OTRO').trim().toUpperCase() : 'OTRO';
+                
+                let regional = idxRegional !== -1 ? String(r[idxRegional] || '').trim().toUpperCase() : '';
+                if (!regional || regional === 'UNDEFINED' || regional === '') regional = 'SIN REGIONAL';
+                
+                if (regional.includes('R1')) regional = 'R1 - COSTA';
+                else if (regional.includes('R2')) regional = 'R2 - ANTIOQUIA';
+                else if (regional.includes('R3')) regional = 'R3 - OCCIDENTE';
+                else if (regional.includes('R4')) regional = 'R4 - CENTRO';
+                else if (regional.includes('R5')) regional = 'R5 - ORIENTE';
+
+                const ciudad = idxCiudad !== -1 ? String(r[idxCiudad] || '-') : '-';
+                const permisos = idxPermisos !== -1 ? String(r[idxPermisos] || '').trim().toUpperCase() : '-';
+                const obs = idxObs !== -1 ? String(r[idxObs] || '-') : '-';
+
+                if (!aliado || aliado === 'undefined' || aliado === '' || aliado === 'Nombre de tecnico que realiza la avanzada') continue;
+
+                if (cliente.includes('ARCOS DORADOS')) cliente = 'ARCOS DORADOS COLOMBIA S.A.S.';
+                else if (cliente.includes('CUEROS VELEZ')) cliente = 'CUEROS VELEZ S.A.S.';
+                else if (cliente.includes('STF GROUP') || cliente.includes('STUDIO F')) cliente = 'STF GROUP S.A.';
+                else if (cliente.includes('DAVIVIENDA') || cliente.includes('DAVIBANK')) cliente = 'BANCO DAVIVIENDA S.A.';
+                else if (cliente.includes('CINE COLOMBIA')) cliente = 'CINE COLOMBIA S.A.S.';
+                else if (cliente.includes('COLOMBIANA DE COMERCIO')) cliente = 'COLOMBIANA DE COMERCIO SA';
+
+                let aliNorm = aliado.toUpperCase();
+                if (aliNorm.includes('TELCO')) aliNorm = 'TELCOS INGENIERÍA';
+                else if (aliNorm.includes('CINCO')) aliNorm = 'CINCO';
+                else if (aliNorm.includes('SICTE')) aliNorm = 'SICTE';
+                else if (aliNorm.includes('INMEL')) aliNorm = 'INMEL';
+                else if (aliNorm.includes('TABASCO')) aliNorm = 'TABASCO OC';
+                else if (aliNorm.includes('DOMINION')) aliNorm = 'DOMINION';
+
+                globalRecords.push({
+                    fecha: fechaClean,
+                    mes: mesAnio,
+                    aliado: aliNorm,
+                    cliente: cliente,
+                    regional: regional,
+                    ciudad: ciudad,
+                    permisos: permisos.includes('SI') ? 'SI' : 'NO',
+                    obs: obs
+                });
+            }
+
+            renderDashboard(globalRecords);
+        }
+
+        function renderDashboard(records) {
+            let totalAdv = records.length;
+            let countSi = records.filter(x => x.permisos === 'SI').length;
+            let countNo = records.filter(x => x.permisos === 'NO').length;
+
+            safeSetText('adv-total', totalAdv);
+            safeSetText('adv-si', countSi);
+            safeSetText('adv-no', countNo);
+            let efectGlobal = totalAdv > 0 ? Math.round((countSi / totalAdv) * 100) : 0;
+            safeSetText('adv-efect', efectGlobal + '%');
+
+            let regionalStats = {
+                'R1 - COSTA': { total: 0, si: 0, no: 0 },
+                'R2 - ANTIOQUIA': { total: 0, si: 0, no: 0 },
+                'R3 - OCCIDENTE': { total: 0, si: 0, no: 0 },
+                'R4 - CENTRO': { total: 0, si: 0, no: 0 },
+                'R5 - ORIENTE': { total: 0, si: 0, no: 0 }
+            };
+
+            let mesStats = {};
+            let clienteStats = {};
+            let aliadoStats = {};
+
+            records.forEach(rec => {
+                let regKey = rec.regional;
+                if (!regionalStats[regKey]) regionalStats[regKey] = { total: 0, si: 0, no: 0 };
+                regionalStats[regKey].total++;
+                if (rec.permisos === 'SI') regionalStats[regKey].si++; else regionalStats[regKey].no++;
+
+                if (!mesStats[rec.mes]) mesStats[rec.mes] = { total: 0, si: 0, no: 0 };
+                mesStats[rec.mes].total++;
+                if (rec.permisos === 'SI') mesStats[rec.mes].si++; else mesStats[rec.mes].no++;
+
+                if (!clienteStats[rec.cliente]) clienteStats[rec.cliente] = { total: 0, si: 0, no: 0 };
+                clienteStats[rec.cliente].total++;
+                if (rec.permisos === 'SI') clienteStats[rec.cliente].si++; else clienteStats[rec.cliente].no++;
+
+                if (!aliadoStats[rec.aliado]) aliadoStats[rec.aliado] = { total: 0, si: 0, no: 0 };
+                aliadoStats[rec.aliado].total++;
+                if (rec.permisos === 'SI') aliadoStats[rec.aliado].si++; else aliadoStats[rec.aliado].no++;
+            });
+
+            // Render Regionales (R1 a R5)
+            let regionalHtml = "";
+            let orderedRegs = ['R1 - COSTA', 'R2 - ANTIOQUIA', 'R3 - OCCIDENTE', 'R4 - CENTRO', 'R5 - ORIENTE'];
+            orderedRegs.forEach(reg => {
+                let st = regionalStats[reg] || { total: 0, si: 0, no: 0 };
+                let efReg = st.total > 0 ? Math.round((st.si / st.total) * 100) : 0;
+                regionalHtml += `<tr onclick="filterBy('regional', '${reg}')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-solid fa-map-pin" style="color:var(--red);"></i> ${reg}</td>
+                    <td><b>${st.total}</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">${st.si}</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">${st.no}</span></td>
+                    <td><span style="font-weight:900; color:${efReg >= 70 ? '#16a34a' : '#da291c'};">${efReg}%</span></td>
+                </tr>`;
+            });
+            document.querySelector('#table-regionales-conteo tbody').innerHTML = regionalHtml;
+
+            // Render Meses
+            let mesesHtml = "";
+            for (let m in mesStats) {
+                let st = mesStats[m];
+                let efMes = st.total > 0 ? Math.round((st.si / st.total) * 100) : 0;
+                mesesHtml += `<tr onclick="filterBy('mes', '${m}')">
+                    <td style="text-align:left; font-weight:800;"><i class="fa-regular fa-calendar-days" style="color:var(--red);"></i> ${m}</td>
+                    <td><b>${st.total}</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">${st.si}</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">${st.no}</span></td>
+                    <td><span style="font-weight:900; color:${efMes >= 70 ? '#16a34a' : '#da291c'};">${efMes}%</span></td>
+                </tr>`;
+            }
+            document.querySelector('#table-meses-conteo tbody').innerHTML = mesesHtml || '<tr><td colspan="5">Sin datos</td></tr>';
+
+            // Render Clientes
+            let sortedClientes = Object.keys(clienteStats).sort((a, b) => clienteStats[b].total - clienteStats[a].total);
+            let clientesHtml = "";
+            for (let c of sortedClientes) {
+                let st = clienteStats[c];
+                let efCli = st.total > 0 ? Math.round((st.si / st.total) * 100) : 0;
+                clientesHtml += `<tr onclick="filterBy('cliente', '${c.replace(/'/g, "\\'")}')">
+                    <td style="text-align:left; font-weight:800;">${c}</td>
+                    <td><b>${st.total}</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">${st.si}</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">${st.no}</span></td>
+                    <td><span style="font-weight:900; color:${efCli >= 70 ? '#16a34a' : '#da291c'};">${efCli}%</span></td>
+                </tr>`;
+            }
+            document.querySelector('#table-clientes-conteo tbody').innerHTML = clientesHtml || '<tr><td colspan="5">Sin datos</td></tr>';
+
+            // Render Aliados
+            let resumenHtml = "";
+            for (let a in aliadoStats) {
+                let st = aliadoStats[a];
+                let efAliado = st.total > 0 ? Math.round((st.si / st.total) * 100) : 0;
+                resumenHtml += `<tr onclick="filterBy('aliado', '${a}')">
+                    <td style="text-align:left; font-weight:800;">${a}</td>
+                    <td><b>${st.total}</b></td>
+                    <td><span style="color:#16a34a; font-weight:900;">${st.si}</span></td>
+                    <td><span style="color:#da291c; font-weight:900;">${st.no}</span></td>
+                    <td><span style="font-weight:900; color:${efAliado >= 70 ? '#16a34a' : '#da291c'};">${efAliado}%</span></td>
+                </tr>`;
+            }
+            document.querySelector('#table-aliados-resumen tbody').innerHTML = resumenHtml || '<tr><td colspan="5">Sin datos</td></tr>';
+
+            renderDetalle(records, "Mostrando Todos los Registros");
+        }
+
+        function renderDetalle(records, tituloFiltro) {
+            safeSetText('detalle-titulo', `Detalle de Avanzadas (${tituloFiltro} - ${records.length} registros)`);
+            let detalleHtml = "";
+            records.forEach(rec => {
+                let badgePermiso = rec.permisos === 'SI' ? '<span style="color:#16a34a; font-weight:900;">SI</span>' : '<span style="color:#da291c; font-weight:900;">NO</span>';
+                detalleHtml += `<tr>
+                    <td>${rec.fecha}</td>
+                    <td><b>${rec.aliado}</b></td>
+                    <td style="text-align:left;">${rec.cliente}</td>
+                    <td><b>${rec.regional}</b></td>
+                    <td>${rec.ciudad}</td>
+                    <td>${badgePermiso}</td>
+                    <td style="text-align:left; font-size:11px; color:#475569;">${rec.obs}</td>
+                </tr>`;
+            });
+            document.querySelector('#table-avanzadas-detalle tbody').innerHTML = detalleHtml || '<tr><td colspan="7">No hay registros que coincidan con el filtro.</td></tr>';
+        }
+
+        function filterByKpi(tipo) {
+            if (tipo === 'ALL') {
+                renderDetalle(globalRecords, "Todos los Registros");
+            } else if (tipo === 'SI') {
+                let filtered = globalRecords.filter(x => x.permisos === 'SI');
+                renderDetalle(filtered, "Filtro: Permisos Aprobados (SI)");
+            } else if (tipo === 'NO') {
+                let filtered = globalRecords.filter(x => x.permisos === 'NO');
+                renderDetalle(filtered, "Filtro: Sin Permisos / Alertas (NO)");
+            }
+        }
+
+        function filterBy(campo, valor) {
+            let filtered = globalRecords.filter(x => x[campo] === valor);
+            renderDetalle(filtered, `Filtro ${campo.toUpperCase()}: ${valor}`);
+        }
+
+        function resetFilters() {
+            renderDetalle(globalRecords, "Todos los Registros");
+        }
+
+        function switchNav(sheetKey) {
+            document.querySelectorAll('.nav-link').forEach(l => {
+                l.classList.toggle('active', l.getAttribute('data-sheet') === sheetKey);
+            });
+            const viewAvanzadas = document.getElementById('view-avanzadas');
+            if (viewAvanzadas) viewAvanzadas.classList.remove('hidden');
+        }
+
+        function parseExcelDateClean(val) {
+            if (!val && val !== 0) return "-";
+            if (val instanceof Date && !isNaN(val)) {
+                return `${String(val.getDate()).padStart(2, '0')}/${String(val.getMonth() + 1).padStart(2, '0')}/${val.getFullYear()}`;
+            }
+            if (typeof val === 'number' && val > 30000 && val < 60000) {
+                const dateObj = new Date(Math.round((val - 25569) * 86400 * 1000));
+                if (!isNaN(dateObj.getTime())) {
+                    return `${String(dateObj.getUTCDate()).padStart(2, '0')}/${String(dateObj.getUTCMonth() + 1).padStart(2, '0')}/${dateObj.getUTCFullYear()}`;
+                }
+            }
+            let str = String(val).trim();
+            if (str.includes('T')) str = str.split('T')[0];
+            return str;
+        }
+
+        function downloadSelfHTML() {
+            let embeddedScript = `<script>
+                window.INITIAL_RECORDS = ${JSON.stringify(globalRecords)};
+                window.addEventListener('DOMContentLoaded', () => {
+                    if (window.INITIAL_RECORDS && window.INITIAL_RECORDS.length > 0) {
+                        globalRecords = window.INITIAL_RECORDS;
+                        document.getElementById('upload-section').classList.add('hidden');
+                        switchNav('AVANZADAS');
+                        renderDashboard(globalRecords);
+                    }
+                });
+            <\/script>`;
+
+            let fullHtml = document.documentElement.outerHTML + "\n" + embeddedScript;
+            const blob = new Blob([fullHtml], { type: "text/html;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "Tablero_Efectividad_Avanzadas_Interactivo.html";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+
+</body></html>
+<script>
+                window.INITIAL_RECORDS = [{"fecha":"jul 22, 2026","mes":"Julio 2026","aliado":"TELCOS INGENIERÍA","cliente":"GRUPO LA COMARCA S.A.S.","regional":"R5 - ORIENTE","ciudad":"VILLAVICENCIO","permisos":"SI","obs":"Se confirma actividad"},{"fecha":"jul 22, 2026","mes":"Julio 2026","aliado":"CINCO","cliente":"CUEROS VELEZ S.A.S.","regional":"R2 - ANTIOQUIA","ciudad":"SABANETA","permisos":"NO","obs":"-"},{"fecha":"jul 22, 2026","mes":"Julio 2026","aliado":"CINCO","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R2 - ANTIOQUIA","ciudad":"ENVIGADO","permisos":"NO","obs":"-"},{"fecha":"jul 21, 2026","mes":"Julio 2026","aliado":"SICTE","cliente":"BANCO DAVIVIENDA S.A.","regional":"R4 - CENTRO","ciudad":"Bogotá","permisos":"NO","obs":"Sin autorización sin correos"},{"fecha":"jul 21, 2026","mes":"Julio 2026","aliado":"CINCO","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R2 - ANTIOQUIA","ciudad":"Medellin","permisos":"SI","obs":"-"},{"fecha":"jul 21, 2026","mes":"Julio 2026","aliado":"CINCO","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R2 - ANTIOQUIA","ciudad":"Medellin","permisos":"NO","obs":"-"},{"fecha":"jul 16, 2026","mes":"Julio 2026","aliado":"CINCO","cliente":"LEVI STRAUSS COLOMBIA SAS","regional":"R2 - ANTIOQUIA","ciudad":"Medellin","permisos":"NO","obs":"-"},{"fecha":"jul 16, 2026","mes":"Julio 2026","aliado":"CINCO","cliente":"BANCO DE BOGOTA","regional":"R2 - ANTIOQUIA","ciudad":"Medellin","permisos":"NO","obs":"-"},{"fecha":"jul 8, 2026","mes":"Julio 2026","aliado":"TELCOS INGENIERÍA","cliente":"COLOMBIANA DE COMERCIO SA","regional":"R5 - ORIENTE","ciudad":"bucaramanga","permisos":"SI","obs":"Se realiza acercamiento en el Centro Comercial Único, donde nos atiende la señora Carolina, quien confirma que los permisos para la ejecución de las actividades programadas para el día de mañana se encuentran aprobados. Con esta validación, se cuenta con la autorización correspondiente para realizar los trabajos según lo programado."},{"fecha":"jul 5, 2026","mes":"Julio 2026","aliado":"TELCOS INGENIERÍA","cliente":"WINNER GROUP S.A","regional":"R5 - ORIENTE","ciudad":"FLORIDABLANCA","permisos":"SI","obs":"Se realiza acercamiento com el centro comercial se validando permisos de ingreso se habla con el area administrador del centro comercial se valida permisos se evidencia que pasaron listados de técnicos erróneos se habla cln el nivel 1. El señor Leonardo reyes  se le pasa listado de técnicos actualizados en indica que se van a enviar al clinete para el tramite y autorización"},{"fecha":"jul 2, 2026","mes":"Julio 2026","aliado":"TABASCO OC","cliente":"STF GROUP S.A.","regional":"R5 - ORIENTE","ciudad":"BARRANCABERMEJA","permisos":"NO","obs":"Cliente indica que sin correo del área de redes de autorización, no permiten el ingreso, y la tienda la abren a las 09:30am"},{"fecha":"jun 30, 2026","mes":"Junio 2026","aliado":"TELCOS INGENIERÍA","cliente":"STF GROUP S.A.","regional":"R5 - ORIENTE","ciudad":"Villavicencio","permisos":"NO","obs":"Se llega al sitio y se valida con el señor Jhon Martinez cel 3126950935 administrador de la tienda, quien indica que no se a enviado correo por parte de Claro para realizar alguna actividad en el local, aclara que el correo se tiene que enviar 24 horas antes de cualquier actividad para poder gestionar los permisos ante el centro comercial. Se envía la invitación al supervisor Oscar Zavala quien válida la información"},{"fecha":"jun 25, 2026","mes":"Junio 2026","aliado":"TELCOS INGENIERÍA","cliente":"STF GROUP S.A.","regional":"R5 - ORIENTE","ciudad":"BUCARAMANGA","permisos":"NO","obs":"Se realiza acercamiento se habla con personal de seguridad indica que no hay correos por parte del cliente. Se realiza a escalamiento se habla con la administración del local el cual indica que no tiene conocimiento de la actividad se llama al n1 José luis rangel indica que se va enviar el correo al cliente. Pero que se debe ingresar como al centro comercial como cliente y la apertura de la tienda es a las 10 am"},{"fecha":"jun 22, 2026","mes":"Junio 2026","aliado":"TABASCO OC","cliente":"UNIDAD NACIONAL DE PROTECCION","regional":"SIN REGIONAL","ciudad":"Barrancabermeja","permisos":"SI","obs":"Se realiza avanzada a las 04:00 pm, se pone horario de 08:15 pm, ya que no estaba la opción de la hora en que se llega."},{"fecha":"jun 22, 2026","mes":"Junio 2026","aliado":"TAB","cliente":"COLOMBIANA DE COMERCIO SA","regional":"R5 - ORIENTE","ciudad":"Piedecuesta","permisos":"SI","obs":"Se realiza avance gestión de permiso de trabajo para el día de mañana 23 de junio del 2026 dentro del cliente"},{"fecha":"jun 22, 2026","mes":"Junio 2026","aliado":"TABASCO OC","cliente":"OTRO","regional":"R5 - ORIENTE","ciudad":"-","permisos":"NO","obs":"-"},{"fecha":"jun 13, 2026","mes":"Junio 2026","aliado":"TABASCO OC","cliente":"CUEROS VELEZ S.A.S.","regional":"R5 - ORIENTE","ciudad":"bucaramanga","permisos":"SI","obs":"-"},{"fecha":"jun 10, 2026","mes":"Junio 2026","aliado":"TELCOS INGENIERÍA","cliente":"BANCO DAVIVIENDA S.A.","regional":"R5 - ORIENTE","ciudad":"BUCARAMANGA","permisos":"SI","obs":"Se realiza acercamiento al sitio y se establece comunicación con el coordinador logístico del centro comercial, Miguel Reyes, quien informa que no se cuenta con permisos ni autorización para el ingreso del personal técnico. Posteriormente, se contacta al coordinador de Nivel 1, Heiner, quien indica que tiene programada una reunión con el cliente a las 4:00 p. m. del día de hoy, en la cual se gestionará el envío de los correos y permisos correspondientes para la ejecución de la actividad el día de mañana. Informa que si no dejan ingresar que ingresen como cliente ya que la actividad va ser dentro del local"},{"fecha":"jun 9, 2026","mes":"Junio 2026","aliado":"TELCOS INGENIERÍA","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"bucaramanga","permisos":"SI","obs":"Se realiza acercamiento al centro comercial y se habla con el administrador del local, señor oscar ruiz, quien informa que ya fue enviado el correo de confirmación para la actividad programada para el día de mañana. Posteriormente, se valida con el área logística del centro comercial, a través del señor Miguel Reyes, quien confirma que los permisos se encuentran aprobados y en orden para la ejecución de la actividad. nota señor oscar indica que si llegan a poner problema para el ingreso fovor llamarlo"},{"fecha":"jun 9, 2026","mes":"Junio 2026","aliado":"TELCOS INGENIERÍA","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"bucaramanga","permisos":"SI","obs":"Se realiza acercamiento al centro comercial y se habla con el administrador del local, señor Dubán, quien informa que ya fue enviado el correo de confirmación para la actividad programada para el día de mañana. Posteriormente, se valida con el área logística del centro comercial, a través del señor Miguel Reyes, quien confirma que los permisos se encuentran aprobados y en orden para la ejecución de la actividad"},{"fecha":"jun 4, 2026","mes":"Junio 2026","aliado":"TELCOS INGENIERÍA","cliente":"CINE COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"BUCARAMANGA","permisos":"SI","obs":"Se realiza acercamiento al centro comercial se habla con la señora maira asistente de de  cine colombian el cual indica q se pasaron permisos y se encuentra ok"},{"fecha":"jun 3, 2026","mes":"Junio 2026","aliado":"TELCOS INGENIERÍA","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"Bucaramanga","permisos":"SI","obs":"Se realiza acercamiento al centro comercial y se validan los permisos, los cuales se encuentran aprobados. Se establece comunicación con el personal logístico y de mantenimiento, el señor Miguel Reyes, quien confirma la autorización para realizar las actividades programadas."},{"fecha":"jun 3, 2026","mes":"Junio 2026","aliado":"TELCOS INGENIERÍA","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"Bucaramanga","permisos":"SI","obs":"Se realiza acercamiento al centro comercial y se validan los permisos, los cuales se encuentran aprobados. Se establece comunicación con el personal logístico y de mantenimiento, el señor Miguel Reyes, quien confirma la autorización para realizar las actividades programadas."},{"fecha":"jun 3, 2026","mes":"Junio 2026","aliado":"TELCOS INGENIERÍA","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"Bucaramanga","permisos":"SI","obs":"Se realiza acercamiento al centro comercial y se validan los permisos, los cuales se encuentran aprobados. Se establece comunicación con el personal logístico y de mantenimiento, el señor Miguel Reyes, quien confirma la autorización para realizar las actividades programadas."},{"fecha":"jun 3, 2026","mes":"Junio 2026","aliado":"TELCOS INGENIERÍA","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"Bucaramanga","permisos":"SI","obs":"Se realiza acercamiento al centro comercial y se validan los permisos, los cuales se encuentran aprobados. Se establece comunicación con el personal logístico y de mantenimiento, el señor Miguel Reyes, quien confirma la autorización para realizar las actividades programadas."},{"fecha":"may 28, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"UTILITIES INC. S.A.S. E.S.P","regional":"R4 - CENTRO","ciudad":"Bogotá","permisos":"NO","obs":"-"},{"fecha":"may 26, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"BUCARAMANGA","permisos":"SI","obs":"Se llega al sitio, se verifica la dirección y se habla con la administrador de la Barbuja de McDonald’s, quienes informan que el correo ya fue enviado. Se hace acercamiento a la administración del Centro Comercial Único confirman que los permisos para mañana están aprobados por la señora, Carolina de SST aprueba los permisos."},{"fecha":"may 26, 2026","mes":"Mayo 2026","aliado":"TERCOS ING","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"BUCARAMANGA","permisos":"SI","obs":"Se realiza acercamiento y se habla con la cliente de McDonald's, Juliana Mariño. Se validan permisos con el centro comercial, los cuales son confirmados como OK por el señor Miguel Reyes. Coordinador logístico"},{"fecha":"may 26, 2026","mes":"Mayo 2026","aliado":"TERCOS ING","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"BUCARAMANGA","permisos":"SI","obs":"Se realiza acercamiento y se habla con la cliente de McDonald's, Juliana Mariño. Se validan permisos con el centro comercial, los cuales son confirmados como OK por el señor Miguel Reyes. Coordinador logístico del centro comercial"},{"fecha":"may 26, 2026","mes":"Mayo 2026","aliado":"TERCOS ING","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"BUCARAMANGA","permisos":"SI","obs":"Se realiza acercamiento y se habla con la cliente de McDonald's, Juliana Mariño. Se validan permisos con el centro comercial, los cuales son confirmados como OK por el señor Miguel Reyes. Coordinar logístico del centro comercial"},{"fecha":"may 26, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"MAPFRE SEGUROS GENERALES DE COLOMBIA","regional":"R5 - ORIENTE","ciudad":"Cucuta","permisos":"SI","obs":"Se realiza avanzada para entrega de servicios"},{"fecha":"may 25, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"M M PETUNIA S A S","regional":"R4 - CENTRO","ciudad":"Bogotá","permisos":"NO","obs":"Q el envargado no está y q tienen q enviar solicitud pero no me dieron información"},{"fecha":"may 25, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"VISION MP.SAS COMERCIAL","regional":"R4 - CENTRO","ciudad":"Bogota","permisos":"NO","obs":"25 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Yesica colorado correo littlemicensueno@gmail.com teléfono 3122284042"},{"fecha":"may 25, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"VISION MP.SAS COMERCIAL","regional":"R4 - CENTRO","ciudad":"Bogota","permisos":"NO","obs":"25 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Valentina Martinez correo micensueno@gmail.com teléfono 3105680021"},{"fecha":"may 25, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"VICMAN SERVICES S.A.S","regional":"R4 - CENTRO","ciudad":"Bogota","permisos":"SI","obs":"25 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Laura Mendoza correo Digital.ensueno@holdingvml.net teléfono 3016077956"},{"fecha":"may 25, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"ROSA EVELIA BUITRAGO DAZA","regional":"R4 - CENTRO","ciudad":"Bogota","permisos":"SI","obs":"25 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Yeison amado correo yeison.barreneche19@gmail.com teléfono 3196243834"},{"fecha":"may 22, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"FOOD FRAME SAS","regional":"R4 - CENTRO","ciudad":"540: Soacha | Cundinamarca","permisos":"NO","obs":"22 de mayo el personal dice que si es posible realizar la migración que ellos piden permisos con el centro comercial administración local  Ana correo anabarbosa0831@gmail.com teléfono 3102189677"},{"fecha":"may 22, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"FABRICA DE BRASIERES HABY SA","regional":"R4 - CENTRO","ciudad":"540: Soacha | Cundinamarca","permisos":"SI","obs":"22 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración María Angélica Escobar correo granplazasoacha@haby.com.co teléfono 8400132"},{"fecha":"may 22, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"NICKI  SAS","regional":"R4 - CENTRO","ciudad":"540: Soacha | Cundinamarca","permisos":"SI","obs":"22 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración  Luis pulgare correo no hay teléfono 3108872729"},{"fecha":"may 22, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"DISTR IVAN MONCADA","regional":"R4 - CENTRO","ciudad":"540: Soacha | Cundinamarca","permisos":"SI","obs":"22 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Laura Rodríguez correo granplazasoacha@trendyshop.com.co teléfono 303089293"},{"fecha":"may 22, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"A G STORE EU","regional":"R4 - CENTRO","ciudad":"540: Soacha | Cundinamarca","permisos":"SI","obs":"22 de mayo el personal dice que si es posible realizar la migración que ellos piden permisos con el centro comercial administración local  Ana correo anabarbosa0831@gmail.com teléfono 3102189677"},{"fecha":"may 22, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"OBSTETRICIA & GINECOLOGIA SAS","regional":"R4 - CENTRO","ciudad":"540: Soacha | Cundinamarca","permisos":"SI","obs":"22 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos con el centro comercial diana Castañeda correo recepción.soacha@oyg.com.co teléfono no manejan."},{"fecha":"may 22, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"SPORTS GLOBAL BRANDS S.A.S","regional":"R4 - CENTRO","ciudad":"540: Soacha | Cundinamarca","permisos":"SI","obs":"22 de mayo el personal dice que si es posible realizar la migración que ellos piden permisos con el centro comercial administración local Julieth Ovalle correo odontólogia@adonsalud.com.co teléfono 3144830458"},{"fecha":"may 22, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"IECO S.A","regional":"R4 - CENTRO","ciudad":"Soacha","permisos":"SI","obs":"22 de mayo el personal dice que si es posible realizar la migración que ellos piden los permisos ante administración Santiago barreto correo coordinación.sur@iecu.com.co teléfono 3125403303"},{"fecha":"may 22, 2026","mes":"Mayo 2026","aliado":"TABASCO OC","cliente":"MERCADOLIB RE COLOMBIA LTDA","regional":"R5 - ORIENTE","ciudad":"GIRON","permisos":"SI","obs":"Se validan permisos de ingresos ok con personal de seguridad no administran números de contactos ya que solo se suministra ingreso con correos enviados desde la sede principal del cliente"},{"fecha":"may 21, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"COMCEL","regional":"R4 - CENTRO","ciudad":"540: Soacha | Cundinamarca","permisos":"SI","obs":"fecha 21 de mayo el señor administrador edilson Gonzáles dice que si necesitan la migración de las redes que ya han escalado el caso pero no les han dado respuesta se les deja la información y dicen que van hablar con el personal de migraciones para que se pueda realizar el trabajo correo hernando.gonzales@claro.com.co teléfono 3102751491"},{"fecha":"may 21, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"OPTICAS VARGAS LTDA","regional":"R4 - CENTRO","ciudad":"Soacha","permisos":"SI","obs":"en el local la señorita Natalia Hernández dice que le gustaría migrar la red gpon que tienen actualmente que no hay problema solo que le indiquen la hora y fecha para sacar los permisos"},{"fecha":"may 21, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"SPORTS GLOBAL BRANDS S.A.S","regional":"R4 - CENTRO","ciudad":"Soacha","permisos":"SI","obs":"el cliente el administrador del punto dice que si le interesa cambiar a fttx pero que va hablar con el jefe para poder realizar los permisos de hablo con el señor Edgar José que está en la tienda"},{"fecha":"may 20, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"TELEDATOS","regional":"R5 - ORIENTE","ciudad":"FLORIDABLANCA","permisos":"SI","obs":"Se realiza acercamiento se valida permisos con el señor Miguel blanco rodriguez indican que se encuentran ok. Se debe enviar listado de equipos electrónicos previamente con serial equipos no adjuntos en el listado no se le dará ingreso al edificio se debe realizar curso logisto para ingreso a la zona franca"},{"fecha":"may 20, 2026","mes":"Mayo 2026","aliado":"INMEL","cliente":"ELCK -ELC-ÉXITO MATUNA - CDP","regional":"R1 - COSTA","ciudad":"CARTAGENA","permisos":"NO","obs":"-"},{"fecha":"may 19, 2026","mes":"Mayo 2026","aliado":"INMEL","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R1 - COSTA","ciudad":"BARRANQUILLA","permisos":"NO","obs":"Horarios para realizar actividades de 6am a 8 am es en mismo horario"},{"fecha":"may 19, 2026","mes":"Mayo 2026","aliado":"INMEL","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R1 - COSTA","ciudad":"Barranquilla","permisos":"NO","obs":"Horarios para realizar actividades de 6am a 8 am en almacén exito y en el C.Comercial Buena vista es en mismo horario"},{"fecha":"may 19, 2026","mes":"Mayo 2026","aliado":"INMEL","cliente":"ARCOS DORADO S.A","regional":"R1 - COSTA","ciudad":"BARRANQUILLA","permisos":"NO","obs":"-"},{"fecha":"may 16, 2026","mes":"Mayo 2026","aliado":"DOMINION","cliente":"MACDONALS","regional":"R2 - ANTIOQUIA","ciudad":"Medellín","permisos":"NO","obs":"Local apertura a las 9 am, se realiza avanzada sin visita técnica ya que no se agendó y cliente no tenía conocimiento, actividad, se el dan indicaciones al cliente para solictud de permisos, N1 indica que solo es recopilacion de datos para coordinar trabajos con el éxito, persona que atiende en sitio Lina Hernández"},{"fecha":"may 13, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"ARCOS DORADOS COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"BUCARAMANGA","permisos":"SI","obs":"Se realiza avanzada para ingreso a realizar instalacion de fibra óptica para la borbuja B102 el cual se validan permisos con personal HSQ del centro comercial el cual quedan autorizados"},{"fecha":"may 13, 2026","mes":"Mayo 2026","aliado":"DOMINION","cliente":"PASTEUR","regional":"R2 - ANTIOQUIA","ciudad":"Medellín","permisos":"NO","obs":"Se le indica al cliente que debe gestionar permisos ante administracion, se suministran fotos de lonque se evidencian en el cliente, cliente solicita que el equipo quede dentro del Rack, informar al cliente con tiempo para que tenga en personal en sitio para que atienda a los técnicos"},{"fecha":"may 13, 2026","mes":"Mayo 2026","aliado":"DOMINION","cliente":"HELADOS MISMOS","regional":"R2 - ANTIOQUIA","ciudad":"-","permisos":"NO","obs":"Solo se realiza levantamiento de información directamente en el local ya que no se cuenta con personal de mtto para suministrar informaciónmas completa en cuanto a la ruta, la burbuja cuenta con un ducto que baja del cielo falso pero no se logra evidenciar que tipo de acometida es ya que llega al cielo falso de la burbuja se recomienda contactar al cliente antes de agendar instalacion que nos apoye con la solicitud de permisos, por el momento"},{"fecha":"may 12, 2026","mes":"Mayo 2026","aliado":"DOMINION","cliente":"SR WOK","regional":"R2 - ANTIOQUIA","ciudad":"Medellín","permisos":"NO","obs":"Se queda a la espera que el cliente solicite permisos ante la admin por medio de mantum, se el indica al cliente que se le da hasta el viernes de la semana en curso para realizar dicho trámite"},{"fecha":"may 11, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"CINE COLOMBIA S.A.S.","regional":"R5 - ORIENTE","ciudad":"VILLAVICENCIO","permisos":"SI","obs":"N/A"},{"fecha":"may 4, 2026","mes":"Mayo 2026","aliado":"TELCOS INGENIERÍA","cliente":"GOU PAYMENTS S.A EASPBV","regional":"R5 - ORIENTE","ciudad":"BUCARAMANGA","permisos":"SI","obs":"Se realiza acercamiento con el personal de seguridad el cual hace escalamiento con el personal de logístico de copetran para Validación de ingreso a la sede el cual indica quebya están autorizados se habla con la ingeniería karol rueda el cual autoriza el ingresó para el dia de mañana"},{"fecha":"abr 29, 2026","mes":"abr 29, 2026","aliado":"TELCOS INGENIERÍA","cliente":"AGENCIA DE DESARROLLO RURAL - ADR","regional":"R5 - ORIENTE","ciudad":"Villavicencio","permisos":"SI","obs":"La señorita administradora no nos respondió para solicitar el correo, no se cuenta con personal fijo de mantenimiento para el edificio y el señor guarda no maneja correo electrónico"},{"fecha":"abr 29, 2026","mes":"abr 29, 2026","aliado":"TELCOS INGENIERÍA","cliente":"ACOMODIN SAS","regional":"R5 - ORIENTE","ciudad":"VILLAVICENCIO","permisos":"SI","obs":"Trabajo dentro del Rack, debido a que no se va a realizar labores en zonas comunes por parte del centro comercial no se requiere ningún tipo de trabajo especial, informa administradora de la tienda y guarda de seguridad Bochica."},{"fecha":"abr 28, 2026","mes":"abr 28, 2026","aliado":"TELCOS INGENIERÍA","cliente":"GOU PAYMENTS S.A EASPBV","regional":"R5 - ORIENTE","ciudad":"Villavicencio","permisos":"NO","obs":"No hay permisos confirmados con el centro comercial para la actividad, administración indica que no reconoce el local/isla con nombre GOU PAYMENTS S.A EASPBV Isla cajero 1105, indica enviar correo informando que cajero es para ubicarlo y validar permisos, no tiene correo para la actividad."}];
+                window.addEventListener('DOMContentLoaded', () => {
+                    if (window.INITIAL_RECORDS && window.INITIAL_RECORDS.length > 0) {
+                        globalRecords = window.INITIAL_RECORDS;
+                        document.getElementById('upload-section').classList.add('hidden');
+                        switchNav('AVANZADAS');
+                        renderDashboard(globalRecords);
+                    }
+                });
+            </script>
