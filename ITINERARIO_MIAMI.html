@@ -4,20 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Miami 2026 - Itinerario Familiar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #0284c7;
       --primary-dark: #0369a1;
       --accent: #f97316;
+      --accent-pink: #ec4899;
       --success: #10b981;
+      --warning: #f59e0b;
       --bg: #f8fafc;
       --card-bg: #ffffff;
-      --text: #1e293b;
+      --text: #0f172a;
       --text-muted: #64748b;
       --border: #e2e8f0;
-      --radius: 16px;
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      --radius-sm: 10px;
+      --radius: 18px;
+      --radius-lg: 24px;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 20px 30px -10px rgba(2, 132, 199, 0.15);
     }
 
     * {
@@ -25,126 +33,180 @@
       margin: 0;
       padding: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.6;
-      padding-bottom: 60px;
+      padding-bottom: 90px;
     }
 
-    /* Hero Header */
+    /* Top Hero Header */
     header {
-      background: linear-gradient(135deg, #0f172a 0%, #0369a1 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #0369a1 60%, #0284c7 100%);
       color: white;
-      padding: 50px 20px 40px;
+      padding: 45px 20px 55px;
       text-align: center;
-      border-bottom-left-radius: 30px;
-      border-bottom-right-radius: 30px;
-      box-shadow: 0 10px 30px rgba(2, 132, 199, 0.2);
+      position: relative;
+      overflow: hidden;
     }
 
-    .badge {
-      display: inline-block;
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--bg);
+      border-radius: 50% 50% 0 0;
+    }
+
+    .badge-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       padding: 6px 16px;
       border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.82rem;
+      font-weight: 700;
       letter-spacing: 0.5px;
       margin-bottom: 12px;
       text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     header h1 {
-      font-size: 2.2rem;
+      font-size: 2.3rem;
       font-weight: 800;
       margin-bottom: 8px;
+      letter-spacing: -0.5px;
     }
 
     header p {
-      font-size: 1rem;
-      opacity: 0.9;
-      max-width: 600px;
+      font-size: 0.98rem;
+      opacity: 0.92;
+      max-width: 620px;
       margin: 0 auto;
     }
 
-    /* Container */
+    /* Main Container */
     .container {
-      max-width: 900px;
+      max-width: 920px;
       margin: -25px auto 0;
       padding: 0 16px;
+      position: relative;
+      z-index: 2;
     }
 
-    /* Quick Info Cards */
+    /* Key Hub Quick Cards */
     .quick-info-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin-bottom: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
     }
 
     .info-card {
       background: var(--card-bg);
-      padding: 20px;
+      padding: 18px 20px;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .info-card-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .info-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #e0f2fe;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
       justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
     }
 
     .info-card h4 {
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
       text-transform: uppercase;
-      margin-bottom: 4px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
 
     .info-card p {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: var(--text);
     }
 
-    .info-card a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-top: 6px;
+    .card-link-btn {
+      margin-top: 10px;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
+      gap: 6px;
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      padding: 7px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
     }
 
-    /* Section Styling */
-    .section-title {
-      font-size: 1.4rem;
-      font-weight: 800;
-      margin: 40px 0 20px;
-      color: #0f172a;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    /* Savings Highlight Banner */
-    .savings-card {
-      background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    .card-link-btn:hover {
+      background: #15803d;
       color: white;
-      padding: 24px;
+    }
+
+    .card-link-btn.blue {
+      background: #eff6ff;
+      color: var(--primary);
+      border-color: #bfdbfe;
+    }
+
+    .card-link-btn.blue:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Savings Banner */
+    .savings-card {
+      background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+      color: white;
+      padding: 22px 24px;
       border-radius: var(--radius);
-      margin-bottom: 30px;
-      box-shadow: 0 10px 20px rgba(4, 120, 87, 0.2);
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
     }
 
     .savings-card h3 {
-      font-size: 1.25rem;
-      margin-bottom: 12px;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -153,24 +215,24 @@
     .comparison-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 14px;
       margin-top: 14px;
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.18);
       padding: 16px;
       border-radius: 12px;
     }
 
     .comp-col h5 {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 6px;
-      opacity: 0.85;
+      margin-bottom: 8px;
+      opacity: 0.9;
     }
 
     .comp-col ul {
       list-style: none;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
 
     .comp-col li {
@@ -180,55 +242,167 @@
     .net-savings {
       margin-top: 14px;
       padding-top: 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      font-weight: 700;
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      font-weight: 800;
       font-size: 1.05rem;
       text-align: right;
-      color: #a7f3d0;
+      color: #6ee7b7;
     }
 
-    /* Day Card */
+    /* Category Filter Tabs */
+    .filter-section {
+      margin: 30px 0 16px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+    }
+
+    .filter-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .pill-btn {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .pill-btn:hover, .pill-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    /* Day Card Styles */
     .day-card {
       background: var(--card-bg);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       overflow: hidden;
+      transition: all 0.25s ease;
     }
 
     .day-header {
-      padding: 18px 24px;
-      background: #f1f5f9;
+      padding: 16px 20px;
+      background: #f8fafc;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
+      cursor: pointer;
+      user-select: none;
     }
 
-    .day-header h3 {
-      font-size: 1.15rem;
+    .day-header:hover {
+      background: #f1f5f9;
+    }
+
+    .day-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .day-num-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: #e0f2fe;
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 0.95rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-num-box span {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .day-text h3 {
+      font-size: 1.05rem;
       font-weight: 800;
       color: #0f172a;
     }
 
+    .day-text p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     .day-tag {
-      background: var(--primary);
-      color: white;
       padding: 4px 12px;
       border-radius: 20px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
 
-    .day-tag.concert {
-      background: #e11d48;
+    .tag-beach { background: #e0f2fe; color: #0284c7; }
+    .tag-shopping { background: #dcfce7; color: #15803d; }
+    .tag-culture { background: #fef3c7; color: #b45309; }
+    .tag-concert { background: #ffe4e6; color: #e11d48; }
+    .tag-travel { background: #f1f5f9; color: #475569; }
+
+    .chevron {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      transition: transform 0.3s ease;
     }
 
+    .day-card.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .day-content {
+      padding: 20px;
+      display: block;
+    }
+
+    .day-card.closed .day-content {
+      display: none;
+    }
+
+    /* Timeline */
     .timeline {
-      padding: 24px;
       list-style: none;
       position: relative;
     }
@@ -236,9 +410,9 @@
     .timeline::before {
       content: '';
       position: absolute;
-      left: 31px;
-      top: 30px;
-      bottom: 30px;
+      left: 27px;
+      top: 25px;
+      bottom: 25px;
       width: 2px;
       background: #e2e8f0;
     }
@@ -246,7 +420,7 @@
     .timeline-item {
       position: relative;
       padding-left: 36px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .timeline-item:last-child {
@@ -256,49 +430,66 @@
     .timeline-dot {
       position: absolute;
       left: 0;
-      top: 4px;
-      width: 16px;
-      height: 16px;
+      top: 5px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: white;
-      border: 4px solid var(--primary);
+      border: 3.5px solid var(--primary);
       z-index: 1;
     }
 
     .timeline-item.highlight .timeline-dot {
       border-color: var(--accent);
+      background: #fff7ed;
+    }
+
+    .timeline-item.concert-item .timeline-dot {
+      border-color: #e11d48;
+      background: #ffe4e6;
     }
 
     .time-slot {
-      font-size: 0.85rem;
-      font-weight: 700;
+      font-size: 0.8rem;
+      font-weight: 800;
       color: var(--primary-dark);
       margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .activity-title {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
       color: #0f172a;
       margin-bottom: 4px;
     }
 
     .activity-desc {
-      font-size: 0.92rem;
-      color: var(--text-muted);
+      font-size: 0.88rem;
+      color: #475569;
       margin-bottom: 8px;
+    }
+
+    .item-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
     }
 
     .map-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: #eff6ff;
       color: var(--primary);
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
       text-decoration: none;
       border: 1px solid #bfdbfe;
       transition: all 0.2s ease;
@@ -309,26 +500,98 @@
       color: white;
     }
 
-    /* Table Budget */
-    .budget-table {
-      width: 100%;
-      border-collapse: collapse;
+    .cost-pill {
+      font-size: 0.76rem;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: #475569;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .tip-box {
+      margin-top: 8px;
+      background: #fffbeb;
+      border-left: 3px solid var(--warning);
+      padding: 8px 12px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.82rem;
+      color: #92400e;
+    }
+
+    /* Checklist Section */
+    .checklist-card {
       background: white;
       border-radius: var(--radius);
-      overflow: hidden;
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-top: 30px;
+    }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .check-item input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .check-item.done {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #166534;
+      text-decoration: line-through;
+    }
+
+    /* Budget Table */
+    .budget-section {
+      margin-top: 35px;
+    }
+
+    .budget-table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
     }
 
+    .budget-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      text-align: left;
+    }
+
     .budget-table th, .budget-table td {
       padding: 14px 18px;
-      text-align: left;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
     }
 
     .budget-table th {
       background: #f8fafc;
-      font-weight: 700;
+      font-weight: 800;
       color: #334155;
       border-bottom: 1px solid var(--border);
     }
@@ -337,67 +600,133 @@
       border-bottom: 1px solid var(--border);
     }
 
-    @media (max-width: 600px) {
-      header h1 { font-size: 1.7rem; }
+    /* Floating Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      z-index: 100;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+    }
+
+    .nav-action-btn {
+      background: #0f172a;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .nav-action-btn:hover {
+      background: var(--primary);
+    }
+
+    .nav-action-btn.green {
+      background: #15803d;
+    }
+
+    @media (max-width: 650px) {
+      header { padding: 35px 16px 45px; }
+      header h1 { font-size: 1.8rem; }
       .comparison-grid { grid-template-columns: 1fr; }
-      .timeline { padding: 18px 12px; }
-      .timeline::before { left: 19px; }
+      .timeline::before { left: 18px; }
       .timeline-item { padding-left: 28px; }
-      .timeline-dot { width: 14px; height: 14px; }
+      .timeline-dot { width: 12px; height: 12px; top: 6px; }
+      .day-header { padding: 14px 16px; }
+      .day-num-box { width: 36px; height: 36px; font-size: 0.85rem; }
+      .bottom-nav { justify-content: space-around; }
+      .nav-action-btn span { display: none; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Top Hero Header -->
   <header>
-    <div class="badge">Itinerario de Viaje Familiar</div>
-    <h1>Miami 2026</h1>
-    <p>30 de Septiembre – 6 de Octubre • 7 Días de Aventura, Compras, Playa y Concierto</p>
+    <div class="badge-top">🌴 Viaje Familiar Miami 2026</div>
+    <h1>Itinerario de Viaje</h1>
+    <p>30 de Septiembre – 6 de Octubre • 2 Días de Playa • 2 Outlets • Concierto Don Omar</p>
   </header>
 
   <div class="container">
 
-    <!-- Quick Info Cards -->
+    <!-- Key Info Cards -->
     <div class="quick-info-grid">
       <div class="info-card">
-        <h4>Hospedaje Airbnb</h4>
-        <p>3560 NW 4th St, Miami</p>
-        <a href="https://maps.google.com/?q=3560+Northwest+4th+Street,+Miami,+FL+33125" target="_blank">Abrir en Maps ↗</a>
+        <div class="info-card-top">
+          <div class="info-icon">🏠</div>
+          <div>
+            <h4>Hospedaje</h4>
+            <p>Airbnb Little Havana</p>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: normal;">3560 NW 4th St, Miami</p>
+        <a class="card-link-btn blue" href="https://maps.google.com/?q=3560+Northwest+4th+Street,+Miami,+FL+33125" target="_blank">📍 Abrir en Maps</a>
       </div>
+
       <div class="info-card">
-        <h4>Alquiler de Auto</h4>
-        <p>Alamo MIA Rental Car Center</p>
-        <a href="https://maps.google.com/?q=Alamo+Rent+A+Car,+3900+NW+25th+St,+Miami,+FL" target="_blank">Ver Ubicación ↗</a>
+        <div class="info-card-top">
+          <div class="info-icon">🚗</div>
+          <div>
+            <h4>Carro Alquilado</h4>
+            <p>Alamo Rent A Car</p>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: normal;">MIA Rental Car Center</p>
+        <a class="card-link-btn blue" href="https://maps.google.com/?q=Alamo+Rent+A+Car,+3900+NW+25th+St,+Miami,+FL" target="_blank">📍 Ver Alamo MIA</a>
       </div>
+
       <div class="info-card">
-        <h4>Navegación GPS</h4>
-        <p>Configurar: "Evitar Peajes"</p>
-        <span style="font-size: 0.8rem; color: #16a34a; font-weight: 600; margin-top: 4px;">Ahorro 100% en peajes</span>
+        <div class="info-card-top">
+          <div class="info-icon">⚡</div>
+          <div>
+            <h4>Configuración GPS</h4>
+            <p>Rutas Sin Peajes</p>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: #16a34a; font-weight: 700;">Ahorro 100% en SunPass</p>
+        <div class="card-link-btn" style="background:#f8fafc; border-color:#cbd5e1; color:#475569; pointer-events:none;">Activar "Evitar Peajes"</div>
       </div>
     </div>
 
     <!-- Savings Breakdown Banner -->
     <div class="savings-card">
-      <h3>💡 Tip Financiero: Walmart vs. Alquiler de Playa</h3>
-      <p style="font-size: 0.92rem; opacity: 0.95;">
-        ¿Por qué compramos el equipo en Walmart el Miércoles en vez de alquilar en South Beach?
+      <h3>💡 Tip de Ahorro: Compras en Walmart vs. Alquiler en Playa</h3>
+      <p style="font-size: 0.9rem; opacity: 0.92;">
+        Por qué compramos el kit el Miércoles para los 2 Días de Playa (South Beach + Key Biscayne):
       </p>
       <div class="comparison-grid">
         <div class="comp-col">
-          <h5>Alquilar en South Beach (2 Días)</h5>
+          <h5>❌ Alquilar en Playa (2 Días)</h5>
           <ul>
             <li>• 4 Sillas reclinables: $80 / día</li>
             <li>• 2 Sombrillas: $40 / día</li>
-            <li>• <strong>Costo 2 días de playa:</strong> $240 USD</li>
+            <li>• <strong>Gasto total estimado:</strong> $240 USD</li>
           </ul>
         </div>
         <div class="comp-col">
-          <h5>Comprar en Walmart (Uso Libre)</h5>
+          <h5>✅ Comprar en Walmart (Uso Ilimitado)</h5>
           <ul>
             <li>• 1 Sombrilla familiar: $15 USD</li>
-            <li>• 4 Sillas portátiles: $60 USD</li>
-            <li>• 1 Cooler de icopor: $10 USD</li>
-            <li>• <strong>Inversión total:</strong> $85 USD</li>
+            <li>• 4 Sillas plegables: $60 USD</li>
+            <li>• 1 Neverita de icopor: $10 USD</li>
+            <li>• <strong>Inversión única:</strong> $85 USD</li>
           </ul>
         </div>
       </div>
@@ -406,308 +735,550 @@
       </div>
     </div>
 
-    <!-- Itinerary Section -->
-    <h2 class="section-title">📅 Plan Detallado Día por Día</h2>
-
-    <!-- Miércoles 30 -->
-    <div class="day-card">
-      <div class="day-header">
-        <h3>Miércoles 30 de Septiembre</h3>
-        <span class="day-tag">Llegada & Little Havana</span>
+    <!-- Filters -->
+    <div class="filter-section">
+      <div class="section-title">
+        <span>📅 Cronograma de Actividades</span>
+        <button id="toggle-all-btn" onclick="toggleAllDays()" style="background:none; border:none; color:var(--primary); font-size:0.85rem; font-weight:700; cursor:pointer;">Contraer Todo</button>
       </div>
-      <ul class="timeline">
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">13:35</div>
-          <div class="activity-title">Llegada al Aeropuerto de Miami (MIA)</div>
-          <div class="activity-desc">Migración, reclamo de equipaje y toma del MIA Mover hacia Alamo.</div>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">14:45</div>
-          <div class="activity-title">Retiro del Vehículo en Alamo</div>
-          <div class="activity-desc">Rental Car Center. Configurar el GPS del celular con "Evitar Peajes".</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Alamo+Rent+A+Car,+3900+NW+25th+St,+Miami" target="_blank">📍 Ver Alamo MIA</a>
-        </li>
-        <li class="timeline-item highlight">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">15:15 – 16:15</div>
-          <div class="activity-title">Compras en Walmart Supercenter</div>
-          <div class="activity-desc">Desayunos, agua, snacks y el kit de playa (sillas, sombrilla y cooler).</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Walmart+Supercenter,+8651+NW+13th+Terrace,+Doral,+FL" target="_blank">📍 Walmart Supercenter Doral</a>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">16:30</div>
-          <div class="activity-title">Check-in en Airbnb & Descanso</div>
-          <div class="activity-desc">3560 NW 4th St. Desempacar, organizar la nevera y refrescarse.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=3560+Northwest+4th+Street,+Miami,+FL+33125" target="_blank">📍 Airbnb Miami</a>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">18:00 – 21:00</div>
-          <div class="activity-title">Little Havana & Cena en Versailles</div>
-          <div class="activity-desc">Caminar por Calle Ocho / Domino Park y cenar comida típica cubana en Versailles (a solo 4 min de casa).</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Versailles+Restaurant,+3555+SW+8th+St,+Miami" target="_blank">📍 Versailles Restaurant</a>
-        </li>
-      </ul>
+      <div class="filter-pills">
+        <button class="pill-btn active" onclick="filterCategory('all', this)">✨ Todo el Viaje</button>
+        <button class="pill-btn" onclick="filterCategory('beach', this)">🏖️ Playas</button>
+        <button class="pill-btn" onclick="filterCategory('shopping', this)">🛍️ Compras (Outlets)</button>
+        <button class="pill-btn" onclick="filterCategory('concert', this)">🔥 Don Omar</button>
+        <button class="pill-btn" onclick="filterCategory('culture', this)">🎨 Arte & Gastronomía</button>
+      </div>
     </div>
 
-    <!-- Jueves 1 -->
-    <div class="day-card">
-      <div class="day-header">
-        <h3>Jueves 1 de Octubre</h3>
-        <span class="day-tag">Sawgrass Mills Outlets</span>
+    <!-- DAYS LIST -->
+
+    <!-- Día 1: Miércoles 30 -->
+    <div class="day-card open" data-category="travel culture">
+      <div class="day-header" onclick="toggleCard(this)">
+        <div class="day-title-wrap">
+          <div class="day-num-box">30<span>SEP</span></div>
+          <div class="day-text">
+            <h3>Miércoles: Llegada & Little Havana</h3>
+            <p>Vuelo, Alamo, Walmart, Check-in y Cena Versailles</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <span class="day-tag tag-travel">Llegada</span>
+          <span class="chevron">▼</span>
+        </div>
       </div>
-      <ul class="timeline">
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">08:30 – 09:30</div>
-          <div class="activity-title">Desayuno en el Airbnb</div>
-          <div class="activity-desc">Preparación en casa con lo comprado en Walmart para salir con energía.</div>
-        </li>
-        <li class="timeline-item highlight">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">10:30 – 18:30</div>
-          <div class="activity-title">Día de Compras en Sawgrass Mills</div>
-          <div class="activity-desc">El outlet más grande de Florida (+350 tiendas). Ruta por la I-75 N libre de peajes. Parqueo gratis.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Sawgrass+Mills,+12801+W+Sunrise+Blvd,+Sunrise,+FL" target="_blank">📍 Sawgrass Mills</a>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">20:00</div>
-          <div class="activity-title">Regreso y Cena Relajada</div>
-          <div class="activity-desc">Dejar compras en el Airbnb y cena informal cerca del hospedaje.</div>
-        </li>
-      </ul>
+      <div class="day-content">
+        <ul class="timeline">
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🛬 13:35</div>
+            <div class="activity-title">Llegada a Miami (MIA)</div>
+            <div class="activity-desc">Migración, recoger equipaje y tomar el tren gratuito MIA Mover hacia el Rental Car Center.</div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🚗 14:45</div>
+            <div class="activity-title">Retiro del Vehículo en Alamo</div>
+            <div class="activity-desc">Recoger carro y configurar Waze/Google Maps con "Evitar Peajes".</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Alamo+Rent+A+Car,+3900+NW+25th+St,+Miami" target="_blank">📍 Ver Alamo MIA</a>
+              <span class="cost-pill">Peajes: $0 USD</span>
+            </div>
+          </li>
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🛒 15:15 – 16:15</div>
+            <div class="activity-title">Parada en Walmart Supercenter (Doral)</div>
+            <div class="activity-desc">Comprar desayunos, aguas, frutas, snacks y el kit de playa (sombrilla, 4 sillas, cooler).</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Walmart+Supercenter,+8651+NW+13th+Terrace,+Doral,+FL" target="_blank">📍 Walmart Doral</a>
+              <span class="cost-pill">Kit Playa: ~$85 USD</span>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🏠 16:30</div>
+            <div class="activity-title">Check-in en Airbnb & Descanso</div>
+            <div class="activity-desc">3560 NW 4th St. Organizar compras en la nevera, desempacar y cambiarse de ropa.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=3560+Northwest+4th+Street,+Miami,+FL+33125" target="_blank">📍 Airbnb Miami</a>
+            </div>
+          </li>
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🍽️ 18:00 – 21:00</div>
+            <div class="activity-title">Calle Ocho & Cena en Versailles</div>
+            <div class="activity-desc">Caminar por Little Havana / Domino Park y cenar ropa vieja o lechón en el mítico Versailles (a solo 4 min de casa).</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Versailles+Restaurant,+3555+SW+8th+St,+Miami" target="_blank">📍 Versailles Restaurant</a>
+              <span class="cost-pill">Cena: ~$25-35 USD/pp</span>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <!-- Viernes 2 -->
-    <div class="day-card">
-      <div class="day-header">
-        <h3>Viernes 2 de Octubre</h3>
-        <span class="day-tag">South Beach & Art Déco</span>
+    <!-- Día 2: Jueves 1 -->
+    <div class="day-card open" data-category="shopping">
+      <div class="day-header" onclick="toggleCard(this)">
+        <div class="day-title-wrap">
+          <div class="day-num-box">01<span>OCT</span></div>
+          <div class="day-text">
+            <h3>Jueves: Sawgrass Mills Outlets</h3>
+            <p>Día completo de compras en el outlet gigante</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <span class="day-tag tag-shopping">🛍️ Outlet #1</span>
+          <span class="chevron">▼</span>
+        </div>
       </div>
-      <ul class="timeline">
-        <li class="timeline-item highlight">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">10:00 – 13:00</div>
-          <div class="activity-title">Mañana de Playa en South Beach & Ocean Drive</div>
-          <div class="activity-desc">Playa con sillas y sombrilla propias. Fotos en el Distrito Art Déco y Mansión Versace.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=7th+Street+Garage,+512+7th+St,+Miami+Beach" target="_blank">📍 Parqueo 7th St Garage</a>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">13:30 – 15:30</div>
-          <div class="activity-title">Almuerzo y Recorrido en Lincoln Road</div>
-          <div class="activity-desc">Paseo peatonal al aire libre con variedad gastronómica, cafés y tiendas.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Lincoln+Road,+Miami+Beach,+FL" target="_blank">📍 Lincoln Road</a>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">16:30 – 18:30</div>
-          <div class="activity-title">Atardecer en South Pointe Park & Muelle</div>
-          <div class="activity-desc">Vistas increíbles de la salida de cruceros y el skyline de Downtown.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=South+Pointe+Park,+Miami+Beach" target="_blank">📍 South Pointe Park</a>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">19:30</div>
-          <div class="activity-title">Cena en Española Way o Brickell</div>
-          <div class="activity-desc">Ambiente nocturno acogedor para cerrar la noche.</div>
-        </li>
-      </ul>
+      <div class="day-content">
+        <ul class="timeline">
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">☕ 08:30 – 09:30</div>
+            <div class="activity-title">Desayuno en Airbnb & Preparación</div>
+            <div class="activity-desc">Desayuno casero nutritivo para rendir todo el día de compras.</div>
+          </li>
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🛍️ 10:30 – 18:30</div>
+            <div class="activity-title">Día Completo en Sawgrass Mills (Sunrise)</div>
+            <div class="activity-desc">Más de 350 tiendas de marcas oficiales con descuentos (Nike, Tommy, Ralph Lauren, Coach). Ruta I-75 N sin peajes.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Sawgrass+Mills,+12801+W+Sunrise+Blvd,+Sunrise,+FL" target="_blank">📍 Sawgrass Mills</a>
+              <span class="cost-pill">Parqueo: $0 USD</span>
+              <span class="cost-pill">Almuerzo: ~$18-25 USD/pp</span>
+            </div>
+            <div class="tip-box">
+              💡 <strong>Tip:</strong> Tomar foto al poste de parqueo al llegar. Parquear cerca de la Entrada 4 o The Colonnade.
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🍕 20:00</div>
+            <div class="activity-title">Regreso al Airbnb y Cena Relajada</div>
+            <div class="activity-desc">Guardar bolsas de compras y cenar algo informal cerca de casa para descansar los pies.</div>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <!-- Sábado 3 -->
-    <div class="day-card">
-      <div class="day-header">
-        <h3>Sábado 3 de Octubre</h3>
-        <span class="day-tag">Helados, Dave's Hot Chicken & Arte</span>
+    <!-- Día 3: Viernes 2 -->
+    <div class="day-card open" data-category="beach culture">
+      <div class="day-header" onclick="toggleCard(this)">
+        <div class="day-title-wrap">
+          <div class="day-num-box">02<span>OCT</span></div>
+          <div class="day-text">
+            <h3>Viernes: South Beach & Art Déco</h3>
+            <p>Playa, Lincoln Road, Ocean Drive y South Pointe Park</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <span class="day-tag tag-beach">🏖️ Playa #1</span>
+          <span class="chevron">▼</span>
+        </div>
       </div>
-      <ul class="timeline">
-        <li class="timeline-item highlight">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">10:30 – 12:15</div>
-          <div class="activity-title">Museum of Ice Cream (Downtown)</div>
-          <div class="activity-desc">Salas interactivas, sprinkle pool y degustación ilimitada de helados.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Museum+of+Ice+Cream,+851+NE+1st+Ave,+Miami" target="_blank">📍 Museum of Ice Cream</a>
-        </li>
-        <li class="timeline-item highlight">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">12:45 – 13:45</div>
-          <div class="activity-title">Almuerzo en Dave's Hot Chicken (Wynwood)</div>
-          <div class="activity-desc">Pollo frito al estilo Nashville. (Tip: Pedir <em>No Spice</em> para cero picante).</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Dave's+Hot+Chicken,+2915+NW+2nd+Ave,+Miami" target="_blank">📍 Dave's Hot Chicken</a>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">14:00 – 16:15</div>
-          <div class="activity-title">Wynwood Walls & Galerías Urbanas</div>
-          <div class="activity-desc">Caminata por el distrito artístico y los murales al aire libre.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Wynwood+Walls,+Miami,+FL" target="_blank">📍 Wynwood Walls</a>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">16:30 – 18:30</div>
-          <div class="activity-title">Paseo por Miami Design District</div>
-          <div class="activity-desc">Arquitectura futurista, arte público y vitrinas de diseñador.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Miami+Design+District" target="_blank">📍 Design District</a>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">19:30</div>
-          <div class="activity-title">Cena en Miracle Mile (Coral Gables)</div>
-          <div class="activity-desc">Boulevard arbolado con cocina mediterránea e italiana.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Miracle+Mile,+Coral+Gables" target="_blank">📍 Miracle Mile</a>
-        </li>
-      </ul>
+      <div class="day-content">
+        <ul class="timeline">
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🏖️ 10:00 – 13:00</div>
+            <div class="activity-title">Mañana de Playa en South Beach & Ocean Drive</div>
+            <div class="activity-desc">Disfrutar del mar turquesa con sombrilla y sillas de Walmart. Fotos en el Distrito Art Déco y Mansión Versace.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=7th+Street+Garage,+512+7th+St,+Miami+Beach" target="_blank">📍 Parqueo 7th St Garage</a>
+              <span class="cost-pill">Parqueo: ~$3/hr</span>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🥗 13:30 – 15:30</div>
+            <div class="activity-title">Almuerzo y Paseo en Lincoln Road</div>
+            <div class="activity-desc">Boulevard peatonal con restaurantes, fuentes, tiendas y cafés al aire libre.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Lincoln+Road,+Miami+Beach,+FL" target="_blank">📍 Lincoln Road</a>
+              <span class="cost-pill">Almuerzo: ~$25-35 USD/pp</span>
+            </div>
+          </li>
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🌅 16:30 – 18:30</div>
+            <div class="activity-title">Atardecer en South Pointe Park & Muelle</div>
+            <div class="activity-desc">Caminata con brisa marina, mirador panorámico y vista a los cruceros gigantes saliendo al mar.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=South+Pointe+Park,+Miami+Beach" target="_blank">📍 South Pointe Park</a>
+              <span class="cost-pill">Entrada: Gratis</span>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🍝 19:30</div>
+            <div class="activity-title">Cena en Española Way</div>
+            <div class="activity-desc">Callejón colonial español iluminado con faroles y restaurantes de comida mediterránea.</div>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <!-- Domingo 4 -->
-    <div class="day-card">
-      <div class="day-header">
-        <h3>Domingo 4 de Octubre</h3>
-        <span class="day-tag concert">🔥 Concierto Don Omar & Bayside</span>
+    <!-- Día 4: Sábado 3 -->
+    <div class="day-card open" data-category="culture">
+      <div class="day-header" onclick="toggleCard(this)">
+        <div class="day-title-wrap">
+          <div class="day-num-box">03<span>OCT</span></div>
+          <div class="day-text">
+            <h3>Sábado: Ice Cream Museum, Dave's & Wynwood</h3>
+            <p>Helados interactivos, pollo frito, murales y Design District</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <span class="day-tag tag-culture">🎨 Arte & Helado</span>
+          <span class="chevron">▼</span>
+        </div>
       </div>
-      <ul class="timeline">
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">10:45 – 14:30</div>
-          <div class="activity-title">Paseo por Bayside Marketplace</div>
-          <div class="activity-desc">Marina, vista a la bahía, música en vivo y opción de tour en barco (Millionaire's Row).</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Bayside+Marketplace,+Miami" target="_blank">📍 Bayside Marketplace</a>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">15:30 – 18:15</div>
-          <div class="activity-title">Descanso en Airbnb & Alistamiento</div>
-          <div class="activity-desc">Tiempo libre para recargar energías y vestirse para la noche.</div>
-        </li>
-        <li class="timeline-item highlight">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">18:30 – 23:30</div>
-          <div class="activity-title">Concierto de Don Omar en Kaseya Center</div>
-          <div class="activity-desc">The Last King World Tour. Llegada temprana para parqueo fluido y filtros de entrada.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Kaseya+Center,+601+Biscayne+Blvd,+Miami" target="_blank">📍 Kaseya Center</a>
-        </li>
-      </ul>
+      <div class="day-content">
+        <ul class="timeline">
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🍦 10:30 – 12:15</div>
+            <div class="activity-title">Museum of Ice Cream (Miami Worldcenter)</div>
+            <div class="activity-desc">Salas temáticas, piscina de chispitas (sprinkle pool) y helados ilimitados incluidos en la entrada.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Museum+of+Ice+Cream,+851+NE+1st+Ave,+Miami" target="_blank">📍 Museum of Ice Cream</a>
+              <span class="cost-pill">Entrada: ~$35-45 USD/pp</span>
+            </div>
+          </li>
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🍗 12:45 – 13:45</div>
+            <div class="activity-title">Almuerzo en Dave's Hot Chicken (Wynwood)</div>
+            <div class="activity-desc">Combos de tenders al estilo Nashville con papas. (Para no picante pedir <em>No Spice</em> o <em>Lite Mild</em>).</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Dave's+Hot+Chicken,+2915+NW+2nd+Ave,+Miami" target="_blank">📍 Dave's Hot Chicken</a>
+              <span class="cost-pill">Combo: ~$14-18 USD/pp</span>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🎨 14:00 – 16:15</div>
+            <div class="activity-title">Recorrido por Wynwood Walls</div>
+            <div class="activity-desc">Murales internacionales, galerías de arte callejero y tiendas concepto.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Wynwood+Walls,+Miami,+FL" target="_blank">📍 Wynwood Walls</a>
+              <span class="cost-pill">Entrada: ~$12 USD/pp</span>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🏛️ 16:30 – 18:30</div>
+            <div class="activity-title">Paseo por Miami Design District</div>
+            <div class="activity-desc">Arquitectura vanguardista, cúpulas geodésicas y vitrinas de alta moda.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Miami+Design+District" target="_blank">📍 Design District</a>
+              <span class="cost-pill">Acceso: Gratis</span>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🍷 19:30</div>
+            <div class="activity-title">Cena en Miracle Mile (Coral Gables)</div>
+            <div class="activity-desc">Cena relajada cerca del Airbnb en un ambiente tranquilo y familiar.</div>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <!-- Lunes 5 -->
-    <div class="day-card">
-      <div class="day-header">
-        <h3>Lunes 5 de Octubre</h3>
-        <span class="day-tag">Key Biscayne & Cena Despedida</span>
+    <!-- Día 5: Domingo 4 -->
+    <div class="day-card open" data-category="shopping concert">
+      <div class="day-header" onclick="toggleCard(this)">
+        <div class="day-title-wrap">
+          <div class="day-num-box">04<span>OCT</span></div>
+          <div class="day-text">
+            <h3>Domingo: Dolphin Mall & Concierto Don Omar</h3>
+            <p>Compras cercanas, descanso previo y show en Kaseya Center</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <span class="day-tag tag-concert">🔥 Don Omar Show</span>
+          <span class="chevron">▼</span>
+        </div>
       </div>
-      <ul class="timeline">
-        <li class="timeline-item highlight">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">10:30 – 14:30</div>
-          <div class="activity-title">Playa en Crandon Park / Bill Baggs (Key Biscayne)</div>
-          <div class="activity-desc">Playa de aguas mansas, palmeras, sombra natural y visita al faro histórico.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Crandon+Park,+Key+Biscayne" target="_blank">📍 Crandon Park</a>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">15:30 – 18:30</div>
-          <div class="activity-title">Armar Maletas / Dolphin Mall Exprés</div>
-          <div class="activity-desc">Organizar y pesar equipaje en el Airbnb para el vuelo del día siguiente.</div>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">19:30 – 22:00</div>
-          <div class="activity-title">Cena Especial de Despedida en Brickell</div>
-          <div class="activity-desc">Paseo nocturno por Brickell City Centre y cena formal con vista a la bahía.</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Brickell+City+Centre,+Miami" target="_blank">📍 Brickell City Centre</a>
-        </li>
-      </ul>
+      <div class="day-content">
+        <ul class="timeline">
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🛍️ 11:00 – 15:00</div>
+            <div class="activity-title">Compras en Dolphin Mall & Almuerzo</div>
+            <div class="activity-desc">A solo 12 min del Airbnb. Más de 240 tiendas (Ross, Burlington, Nike Factory). Parqueo gratuito.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Dolphin+Mall,+11401+NW+12th+St,+Miami" target="_blank">📍 Dolphin Mall</a>
+              <span class="cost-pill">Parqueo: $0 USD</span>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">😴 15:30 – 18:15</div>
+            <div class="activity-title">Descanso en Airbnb & Alistamiento</div>
+            <div class="activity-desc">Descargar compras, tomar una siesta reparadora y alistarse para la noche.</div>
+          </li>
+          <li class="timeline-item concert-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">👑 18:30 – 23:30</div>
+            <div class="activity-title">CONCIERTO DON OMAR: The Last King World Tour</div>
+            <div class="activity-desc">Kaseya Center (Downtown). Salida con tiempo para parqueo en garajes aledaños y entrada fluida al estadio. Show arranca 20:00.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Kaseya+Center,+601+Biscayne+Blvd,+Miami" target="_blank">📍 Kaseya Center</a>
+              <span class="cost-pill">Parqueo Show: ~$30-40 USD</span>
+            </div>
+            <div class="tip-box">
+              💡 <strong>Tip de Parqueo:</strong> Usar garajes de Miami Worldcenter o Downtown sobre NE 2nd Ave para salir rápido después del evento.
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <!-- Martes 6 -->
-    <div class="day-card">
-      <div class="day-header">
-        <h3>Martes 6 de Octubre</h3>
-        <span class="day-tag">Retorno a Casa</span>
+    <!-- Día 6: Lunes 5 -->
+    <div class="day-card open" data-category="beach culture">
+      <div class="day-header" onclick="toggleCard(this)">
+        <div class="day-title-wrap">
+          <div class="day-num-box">05<span>OCT</span></div>
+          <div class="day-text">
+            <h3>Lunes: Key Biscayne & Cena de Despedida</h3>
+            <p>Playa tranquila en Crandon Park, maletas y cena en Brickell</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <span class="day-tag tag-beach">🏖️ Playa #2</span>
+          <span class="chevron">▼</span>
+        </div>
       </div>
-      <ul class="timeline">
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">09:30 – 10:00</div>
-          <div class="activity-title">Check-out del Airbnb</div>
-          <div class="activity-desc">Revisión de habitaciones y carga de maletas en el auto.</div>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">10:30 – 11:45</div>
-          <div class="activity-title">Brunch de Despedida</div>
-          <div class="activity-desc">Desayuno/almuerzo relajado cerca de Coral Gables o Blue Lagoon.</div>
-        </li>
-        <li class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">12:00</div>
-          <div class="activity-title">Devolución de Auto en Alamo</div>
-          <div class="activity-desc">Tanquear auto antes de entregar y tomar el MIA Mover a la terminal.</div>
-        </li>
-        <li class="timeline-item highlight">
-          <div class="timeline-dot"></div>
-          <div class="time-slot">15:10</div>
-          <div class="activity-title">Vuelo de Regreso</div>
-          <div class="activity-desc">Salida puntual tras pasar los filtros de seguridad de la TSA.</div>
-        </li>
-      </ul>
+      <div class="day-content">
+        <ul class="timeline">
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🌴 10:30 – 15:00</div>
+            <div class="activity-title">Día de Playa en Crandon Park (Key Biscayne)</div>
+            <div class="activity-desc">Aguas mansas y cristalinas protegidas por arrecifes, palmeras, sombra natural y paseo al histórico faro de Cape Florida.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Crandon+Park,+Key+Biscayne" target="_blank">📍 Crandon Park</a>
+              <span class="cost-pill">Entrada Parque: ~$8 USD/carro</span>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🧳 15:30 – 18:30</div>
+            <div class="activity-title">Organización Final y Armado de Maletas</div>
+            <div class="activity-desc">Regreso al Airbnb para empacar todas las compras de la semana y pesar maletas sin apuros.</div>
+          </li>
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">✨ 19:30 – 22:00</div>
+            <div class="activity-title">Paseo & Cena de Despedida en Brickell</div>
+            <div class="activity-desc">Caminar por el moderno Brickell City Centre y cena especial familiar con vistas a la bahía.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Brickell+City+Centre,+Miami" target="_blank">📍 Brickell City Centre</a>
+              <span class="cost-pill">Cena: ~$35-50 USD/pp</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Día 7: Martes 6 -->
+    <div class="day-card open" data-category="travel">
+      <div class="day-header" onclick="toggleCard(this)">
+        <div class="day-title-wrap">
+          <div class="day-num-box">06<span>OCT</span></div>
+          <div class="day-text">
+            <h3>Martes: Check-out & Regreso a Casa</h3>
+            <p>Brunch, entrega de auto en Alamo y vuelo de regreso</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <span class="day-tag tag-travel">Retorno</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="day-content">
+        <ul class="timeline">
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">📦 09:30 – 10:00</div>
+            <div class="activity-title">Check-out del Airbnb</div>
+            <div class="activity-desc">Revisión de habitaciones para no olvidar cargadores ni documentos y cargar maletas al baúl.</div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🍳 10:30 – 11:45</div>
+            <div class="activity-title">Brunch de Despedida Familiar</div>
+            <div class="activity-desc">Desayuno/almuerzo relajado cerca de Coral Gables o Blue Lagoon.</div>
+          </li>
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">⛽ 12:00</div>
+            <div class="activity-title">Devolución de Auto en Alamo</div>
+            <div class="activity-desc">Llenar tanque de gasolina cerca al aeropuerto y entregar el auto en Alamo MIA. Tomar MIA Mover a la terminal.</div>
+            <div class="item-footer">
+              <a class="map-btn" href="https://maps.google.com/?q=Alamo+Rent+A+Car,+3900+NW+25th+St,+Miami" target="_blank">📍 Alamo MIA</a>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">✈️ 15:10</div>
+            <div class="activity-title">Vuelo de Regreso</div>
+            <div class="activity-desc">Paso por seguridad de la TSA y embarque puntual del vuelo de regreso.</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Interactive Checklist -->
+    <div class="checklist-card">
+      <h3 style="font-size: 1.15rem; font-weight:800; color:#0f172a;">✅ Checklist Antes de Salir de Casa</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted);">Puedes marcar lo que ya esté listo (se guarda en tu celular):</p>
+      <div class="checklist-grid">
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox"> Pasaportes vigentes</label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox"> Boletas Don Omar descargadas</label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox"> Boletas Museum of Ice Cream</label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox"> Tarjeta de crédito para Alamo</label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox"> Configurar GPS sin peajes</label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox"> Adaptadores y cargadores</label>
+      </div>
     </div>
 
     <!-- Budget Table -->
-    <h2 class="section-title">📊 Resumen de Gastos Proyectados</h2>
-    <table class="budget-table">
-      <thead>
-        <tr>
-          <th>Concepto</th>
-          <th>Tipo</th>
-          <th>Rango Estimado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Peajes en Autopistas</strong></td>
-          <td>Por Vehículo</td>
-          <td><span style="color:#16a34a; font-weight:700;">$0 USD (GPS sin peajes)</span></td>
-        </tr>
-        <tr>
-          <td><strong>Kit de Playa Walmart</strong></td>
-          <td>Por Grupo</td>
-          <td>$85 USD (vs $240 alquiler)</td>
-        </tr>
-        <tr>
-          <td><strong>Museum of Ice Cream</strong></td>
-          <td>Por Persona</td>
-          <td>$35 – $45 USD</td>
-        </tr>
-        <tr>
-          <td><strong>Wynwood Walls</strong></td>
-          <td>Por Persona</td>
-          <td>$12 – $13 USD</td>
-        </tr>
-        <tr>
-          <td><strong>Dave's Hot Chicken</strong></td>
-          <td>Por Persona</td>
-          <td>$14 – $18 USD</td>
-        </tr>
-        <tr>
-          <td><strong>Parqueos Totales (Semana)</strong></td>
-          <td>Por Vehículo</td>
-          <td>$90 – $130 USD (incluye concierto)</td>
-        </tr>
-        <tr>
-          <td><strong>Comidas Diarias Promedio</strong></td>
-          <td>Por Persona</td>
-          <td>$55 – $85 USD / día</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="budget-section">
+      <h3 class="section-title">📊 Resumen de Gastos Proyectados</h3>
+      <div class="budget-table-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr>
+              <th>Rubro / Concepto</th>
+              <th>Modalidad</th>
+              <th>Rango Estimado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Peajes en Autopistas</strong></td>
+              <td>Por Vehículo</td>
+              <td><span style="color:#15803d; font-weight:700;">$0 USD (GPS sin peajes)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Kit de Playa Walmart (2 Días de Uso)</strong></td>
+              <td>Por Grupo</td>
+              <td>$85 USD (Ahorro de $155 USD)</td>
+            </tr>
+            <tr>
+              <td><strong>Museum of Ice Cream</strong></td>
+              <td>Por Persona</td>
+              <td>$35 – $45 USD</td>
+            </tr>
+            <tr>
+              <td><strong>Wynwood Walls</strong></td>
+              <td>Por Persona</td>
+              <td>$12 – $13 USD</td>
+            </tr>
+            <tr>
+              <td><strong>Dave's Hot Chicken</strong></td>
+              <td>Por Persona</td>
+              <td>$14 – $18 USD</td>
+            </tr>
+            <tr>
+              <td><strong>Parqueos Totales (Semana)</strong></td>
+              <td>Por Vehículo</td>
+              <td>$90 – $130 USD (incluye concierto)</td>
+            </tr>
+            <tr>
+              <td><strong>Comidas Diarias Promedio</strong></td>
+              <td>Por Persona</td>
+              <td>$55 – $85 USD / día</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
   </div>
+
+  <!-- Floating Nav Bar -->
+  <div class="bottom-nav">
+    <a class="nav-action-btn green" href="https://maps.google.com/?q=3560+Northwest+4th+Street,+Miami,+FL+33125" target="_blank">
+      🏠 <span>Airbnb</span>
+    </a>
+    <a class="nav-action-btn" href="https://maps.google.com/?q=Alamo+Rent+A+Car,+3900+NW+25th+St,+Miami" target="_blank">
+      🚗 <span>Alamo</span>
+    </a>
+    <a class="nav-action-btn" href="https://maps.google.com/?q=Kaseya+Center,+Miami" target="_blank">
+      🔥 <span>Concierto</span>
+    </a>
+    <button class="nav-action-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+      ⬆️ <span>Inicio</span>
+    </button>
+  </div>
+
+  <script>
+    // Toggle individual card accordion
+    function toggleCard(header) {
+      const card = header.closest('.day-card');
+      card.classList.toggle('open');
+      card.classList.toggle('closed');
+    }
+
+    // Toggle all days open/closed
+    let allOpen = true;
+    function toggleAllDays() {
+      const cards = document.querySelectorAll('.day-card');
+      const btn = document.getElementById('toggle-all-btn');
+      allOpen = !allOpen;
+      cards.forEach(c => {
+        if (allOpen) {
+          c.classList.add('open');
+          c.classList.remove('closed');
+        } else {
+          c.classList.remove('open');
+          c.classList.add('closed');
+        }
+      });
+      btn.innerText = allOpen ? 'Contraer Todo' : 'Expandir Todo';
+    }
+
+    // Category Filter Function
+    function filterCategory(cat, btn) {
+      document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.day-card');
+      cards.forEach(card => {
+        if (cat === 'all') {
+          card.style.display = 'block';
+        } else {
+          const categories = card.getAttribute('data-category') || '';
+          if (categories.includes(cat)) {
+            card.style.display = 'block';
+            card.classList.add('open');
+            card.classList.remove('closed');
+          } else {
+            card.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    // Interactive checklist toggle
+    function toggleCheck(item) {
+      const checkbox = item.querySelector('input');
+      setTimeout(() => {
+        if (checkbox.checked) {
+          item.classList.add('done');
+        } else {
+          item.classList.remove('done');
+        }
+      }, 50);
+    }
+  </script>
 
 </body>
 </html>
