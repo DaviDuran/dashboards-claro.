@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Formulario de Campo - Avanzadas</title>
+<style>
+  * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { background-color: #f3f4f6; margin: 0; padding: 16px; color: #1f2937; }
+  .container { max-width: 560px; margin: 0 auto; }
+  .card { background: #ffffff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.07); margin-bottom: 16px; }
+  h2 { margin-top: 0; font-size: 1.2rem; text-align: center; color: #111827; }
+  h3 { font-size: 0.95rem; color: #dc2626; text-transform: uppercase; letter-spacing: .03em; margin: 0 0 12px 0; border-bottom: 2px solid #fee2e2; padding-bottom: 6px; }
+  .form-group { margin-bottom: 14px; }
+  label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: #374151; }
+  input, select, textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.95rem; background: #fff; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: #2563eb; }
+  input[readonly] { background-color: #f9fafb; color: #6b7280; }
+  .row2 { display: flex; gap: 10px; }
+  .row2 > div { flex: 1; }
+  .btn { display: inline-block; width: 100%; border: none; padding: 12px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+  .btn-admin { background: #111827; color: #fff; }
+  .btn-buscar { background: #2563eb; color: #fff; }
+  .btn-submit { background: #16a34a; color: #fff; margin-top: 10px; }
+  .btn-submit:hover { background: #15803d; }
+  .btn-secundario { background: #e5e7eb; color: #111827; margin-top: 8px; }
+  .btn-camera { display: inline-block; background: #0284c7; color: #fff; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500; }
+  .photo-box { border: 2px dashed #cbd5e1; border-radius: 8px; padding: 10px; text-align: center; background: #f8fafc; }
+  .photo-box input[type="file"] { display: none; }
+  .preview { max-width: 100%; max-height: 150px; border-radius: 6px; margin-top: 8px; display: none; }
+  .status { margin-top: 10px; font-size: 0.85rem; text-align: center; font-weight: 600; }
+  .status.ok { color: #15803d; }
+  .status.err { color: #b91c1c; }
+  .badge { display: inline-block; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+  .badge.empty { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+  .oculto { display: none !important; }
+  .info-cliente { background: #f9fafb; border-radius: 8px; padding: 12px; margin-top: 4px; }
+  .info-cliente div { font-size: 0.85rem; margin-bottom: 4px; }
+  .info-cliente b { color: #111827; }
+  details summary { cursor: pointer; font-weight: 600; color: #374151; margin-bottom: 8px; }
+  .fila-fotos { display: flex; gap: 10px; }
+  .fila-fotos > div { flex: 1; }
+  .contador { font-size: 0.78rem; color: #6b7280; text-align: right; margin-top: -6px; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ================= ESTADO DE LA BASE (solo informativo para el técnico) ================= -->
+  <div class="card">
+    <div id="baseStatus" class="status">Cargando base de cuentas...</div>
+  </div>
+
+  <!-- ================= FORMULARIO PRINCIPAL ================= -->
+  <div class="card">
+    <h2>Levantamiento en Campo - Avanzadas</h2>
+
+    <div class="form-group">
+      <label for="search">Buscar por N° de Cuenta</label>
+      <div class="row2">
+        <input type="text" id="search" placeholder="Ej: 4785435" inputmode="numeric" />
+        <div style="flex:0 0 100px;">
+          <button type="button" class="btn btn-buscar" id="btnBuscar">Buscar</button>
+        </div>
+      </div>
+      <div id="searchStatus" class="status"></div>
+    </div>
+
+    <form id="fieldForm">
+      <!-- Datos autocompletados (solo lectura) -->
+      <div class="info-cliente">
+        <div class="form-group" style="margin-bottom:8px;">
+          <label>Cuenta</label>
+          <input type="text" id="regCuenta" readonly required>
+        </div>
+        <div class="row2">
+          <div class="form-group"><label>Nombre</label><input type="text" id="regNombre" readonly></div>
+          <div class="form-group"><label>Ciudad</label><input type="text" id="regCiudad" readonly></div>
+        </div>
+        <div class="form-group"><label>Dirección</label><input type="text" id="regDireccion" readonly></div>
+        <div class="row2">
+          <div class="form-group"><label>Regional</label><input type="text" id="regRegional" readonly></div>
+          <div class="form-group"><label>Tipo de Predio</label><input type="text" id="regTipoPredio" readonly></div>
+        </div>
+        <div class="row2">
+          <div class="form-group"><label>Aliado</label><input type="text" id="regAliado" readonly></div>
+          <div class="form-group"><label>Estado Homologado</label><input type="text" id="regEstadoHomologado" readonly></div>
+        </div>
+      </div>
+
+      <hr style="border:0;border-top:1px solid #e5e7eb;margin:16px 0;">
+
+      <div class="form-group">
+        <label>Técnico / Aliado que diligencia</label>
+        <input type="text" id="tecnico" placeholder="Nombre de quien registra" required>
+      </div>
+
+      <!-- Gestión con el cliente -->
+      <h3>Gestión con el Cliente</h3>
+      <div class="form-group">
+        <label for="aceptaMigracion">¿El cliente acepta la migración?</label>
+        <select id="aceptaMigracion" required>
+          <option value="">Seleccione una opción...</option>
+          <option value="SI">Sí, confirmado</option>
+          <option value="NO">No acepta</option>
+        </select>
+      </div>
+
+      <div id="bloqueSi" class="oculto">
+        <div class="badge">✔ Migración confirmada por el cliente</div>
+      </div>
+
+      <div id="bloqueNo" class="oculto">
+        <div class="form-group">
+          <label for="comentarioNo">Comentario / Motivo</label>
+          <textarea id="comentarioNo" rows="3" placeholder="Motivo por el cual no acepta..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="fechaReagenda">Nueva fecha de reagendamiento</label>
+          <input type="date" id="fechaReagenda">
+        </div>
+      </div>
+
+      <!-- Evidencia fotográfica -->
+      <h3>Evidencia Fotográfica del Predio</h3>
+      <div class="fila-fotos">
+        <div class="photo-box">
+          <label for="foto1" class="btn-camera">📸 Foto 1</label>
+          <input type="file" id="foto1" accept="image/*" capture="environment">
+          <br><img id="preview1" class="preview" alt="Vista previa 1">
+        </div>
+        <div class="photo-box">
+          <label for="foto2" class="btn-camera">📸 Foto 2</label>
+          <input type="file" id="foto2" accept="image/*" capture="environment">
+          <br><img id="preview2" class="preview" alt="Vista previa 2">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-submit">✅ Enviar Formulario</button>
+    </form>
+    <div id="statusMsg" class="status"></div>
+  </div>
+
+  <!-- ================= REGISTROS ACUMULADOS ================= -->
+  <div class="card">
+    <details>
+      <summary>📦 Registros enviados en este dispositivo</summary>
+      <div id="contadorRegistros" class="contador"></div>
+      <button type="button" class="btn btn-admin" id="btnDescargarTodos">⬇️ Descargar JSON de todos los registros</button>
+      <button type="button" class="btn btn-secundario" id="btnLimpiarRegistros">🗑️ Borrar registros acumulados</button>
+    </details>
+  </div>
+
+</div>
+
+<script>
+/* =========================================================
+   1. BASE DE CUENTAS: se lee automáticamente desde el archivo
+      "base_cuentas.json" ubicado en el MISMO repositorio de
+      GitHub (junto a este index.html). El técnico NUNCA ve
+      ni carga ningún Excel — el HTML tampoco lo contiene.
+
+      El archivo base_cuentas.json se genera con la herramienta
+      "GENERADOR_BASE_CUENTAS.html" (uso interno) y se reemplaza
+      en el repositorio cada vez que la base cambie. El index.html
+      nunca se modifica ni crece de tamaño.
+
+      Además, se guarda una copia en localStorage como caché
+      offline: si el técnico pierde conexión, seguirá viendo la
+      última base descargada exitosamente.
+   ========================================================= */
+const LS_BASE_KEY = "baseCuentasAvanzada";
+const LS_REGISTROS_KEY = "registrosMigracionAvanzada";
+const BASE_JSON_URL = "./base_cuentas.json"; // debe estar junto al index.html en GitHub
+
+let baseCuentas = {};
+
+function getBaseCache() {
+  try { return JSON.parse(localStorage.getItem(LS_BASE_KEY) || "{}"); }
+  catch(e){ return {}; }
+}
+function setBaseCache(obj){ localStorage.setItem(LS_BASE_KEY, JSON.stringify(obj)); }
+
+function normKey(v){ return String(v ?? "").trim(); }
+
+function pintarEstadoBase(n, origen){
+  const el = document.getElementById("baseStatus");
+  if(n > 0){
+    el.className = "status ok";
+    el.innerText = `✔ Base actualizada (${n} cuentas) ${origen}`;
+  } else {
+    el.className = "status err";
+    el.innerText = "⚠ No se pudo cargar la base de cuentas. Verifica tu conexión.";
+  }
+}
+
+async function cargarBaseDesdeRepositorio(){
+  try {
+    const resp = await fetch(BASE_JSON_URL, { cache: "no-store" });
+    if(!resp.ok) throw new Error("No se encontró base_cuentas.json (HTTP " + resp.status + ")");
+    const data = await resp.json();
+    baseCuentas = data;
+    setBaseCache(data); // guarda copia offline
+    pintarEstadoBase(Object.keys(data).length, "· descargada del servidor");
+  } catch(err){
+    // Sin conexión o archivo no disponible: usa la última copia guardada localmente
+    const cache = getBaseCache();
+    const n = Object.keys(cache).length;
+    baseCuentas = cache;
+    if(n > 0){
+      pintarEstadoBase(n, "· modo sin conexión (última copia guardada)");
+    } else {
+      pintarEstadoBase(0, "");
+    }
+    console.warn("No se pudo descargar base_cuentas.json:", err);
+  }
+}
+
+function getBase(){ return baseCuentas; }
+
+/* =========================================================
+   2. BUSCAR CUENTA Y AUTOCOMPLETAR
+   ========================================================= */
+function limpiarCamposCliente(){
+  ["regCuenta","regNombre","regCiudad","regDireccion","regRegional","regTipoPredio","regAliado","regEstadoHomologado"]
+    .forEach(id => document.getElementById(id).value = "");
+}
+
+function buscarCuenta(){
+  const val = normKey(document.getElementById("search").value);
+  const st = document.getElementById("searchStatus");
+  if(!val){ st.className="status err"; st.innerText="Escribe un número de cuenta."; return; }
+
+  const base = getBase();
+  const item = base[val];
+
+  if(!item){
+    limpiarCamposCliente();
+    st.className = "status err";
+    st.innerText = "⚠ Cuenta no encontrada en la base cargada.";
+    return;
+  }
+
+  document.getElementById("regCuenta").value = item.cuenta;
+  document.getElementById("regNombre").value = item.nombre;
+  document.getElementById("regCiudad").value = item.ciudad;
+  document.getElementById("regDireccion").value = item.direccion;
+  document.getElementById("regRegional").value = item.regional;
+  document.getElementById("regTipoPredio").value = item.tipoPredio;
+  document.getElementById("regAliado").value = item.aliado;
+  document.getElementById("regEstadoHomologado").value = item.estadoHomologado;
+
+  st.className = "status ok";
+  st.innerText = "✔ Cuenta encontrada y datos cargados.";
+}
+
+document.getElementById("btnBuscar").addEventListener("click", buscarCuenta);
+document.getElementById("search").addEventListener("keydown", function(e){
+  if(e.key === "Enter"){ e.preventDefault(); buscarCuenta(); }
+});
+
+/* =========================================================
+   3. MOSTRAR/OCULTAR BLOQUES SEGÚN ACEPTACIÓN DEL CLIENTE
+   ========================================================= */
+document.getElementById("aceptaMigracion").addEventListener("change", function(e){
+  const val = e.target.value;
+  document.getElementById("bloqueSi").classList.toggle("oculto", val !== "SI");
+  document.getElementById("bloqueNo").classList.toggle("oculto", val !== "NO");
+});
+
+/* =========================================================
+   4. CAPTURA Y COMPRESIÓN DE FOTOS (hasta 2)
+   ========================================================= */
+let fotos = { foto1: "", foto2: "" };
+
+function manejarFoto(inputId, previewId, key){
+  document.getElementById(inputId).addEventListener("change", function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt){
+      const img = new Image();
+      img.onload = function(){
+        const canvas = document.createElement("canvas");
+        const maxDim = 1024;
+        let width = img.width, height = img.height;
+        if(width > height && width > maxDim){ height *= maxDim/width; width = maxDim; }
+        else if(height > maxDim){ width *= maxDim/height; height = maxDim; }
+        canvas.width = width; canvas.height = height;
+        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+        const base64 = canvas.toDataURL("image/jpeg", 0.65);
+        fotos[key] = base64;
+        const preview = document.getElementById(previewId);
+        preview.src = base64;
+        preview.style.display = "block";
+      };
+      img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+manejarFoto("foto1","preview1","foto1");
+manejarFoto("foto2","preview2","foto2");
+
+/* =========================================================
+   5. REGISTROS ACUMULADOS EN localStorage
+   ========================================================= */
+function getRegistros(){
+  try { return JSON.parse(localStorage.getItem(LS_REGISTROS_KEY) || "[]"); }
+  catch(e){ return []; }
+}
+function setRegistros(arr){ localStorage.setItem(LS_REGISTROS_KEY, JSON.stringify(arr)); }
+
+function pintarContadorRegistros(){
+  const arr = getRegistros();
+  document.getElementById("contadorRegistros").innerText = `${arr.length} registro(s) guardados en este dispositivo.`;
+}
+
+function descargarJSON(obj, filename){
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+}
+
+document.getElementById("btnDescargarTodos").addEventListener("click", function(){
+  descargarJSON(getRegistros(), `registros_migracion_${Date.now()}.json`);
+});
+
+document.getElementById("btnLimpiarRegistros").addEventListener("click", function(){
+  if(confirm("¿Seguro que deseas borrar TODOS los registros guardados en este dispositivo?")){
+    setRegistros([]);
+    pintarContadorRegistros();
+  }
+});
+
+/* =========================================================
+   6. ENVÍO DEL FORMULARIO
+   ========================================================= */
+document.getElementById("fieldForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const statusMsg = document.getElementById("statusMsg");
+
+  const cuenta = document.getElementById("regCuenta").value;
+  if(!cuenta){
+    statusMsg.className = "status err";
+    statusMsg.innerText = "✖ Primero busca y selecciona una cuenta válida.";
+    return;
+  }
+
+  const acepta = document.getElementById("aceptaMigracion").value;
+  if(!acepta){
+    statusMsg.className = "status err";
+    statusMsg.innerText = "✖ Selecciona si el cliente acepta o no la migración.";
+    return;
+  }
+
+  let comentario = "", fechaReagenda = "";
+  if(acepta === "NO"){
+    comentario = document.getElementById("comentarioNo").value.trim();
+    fechaReagenda = document.getElementById("fechaReagenda").value;
+    if(!comentario || !fechaReagenda){
+      statusMsg.className = "status err";
+      statusMsg.innerText = "✖ Si el cliente no acepta, indica el comentario y la nueva fecha de reagendamiento.";
+      return;
+    }
+  }
+
+  const tecnico = document.getElementById("tecnico").value.trim();
+  if(!tecnico){
+    statusMsg.className = "status err";
+    statusMsg.innerText = "✖ Indica el nombre del técnico/aliado que diligencia.";
+    return;
+  }
+
+  const payload = {
+    id: `${cuenta}_${Date.now()}`,
+    cuenta: cuenta,
+    nombre: document.getElementById("regNombre").value,
+    ciudad: document.getElementById("regCiudad").value,
+    direccion: document.getElementById("regDireccion").value,
+    regional: document.getElementById("regRegional").value,
+    tipoPredio: document.getElementById("regTipoPredio").value,
+    aliado: document.getElementById("regAliado").value,
+    estadoHomologado: document.getElementById("regEstadoHomologado").value,
+    tecnico: tecnico,
+    aceptaMigracion: acepta,
+    comentario: comentario,
+    fechaReagendamiento: fechaReagenda,
+    fotos: { foto1: fotos.foto1, foto2: fotos.foto2 },
+    fechaRegistro: new Date().toISOString()
+  };
+
+  const registros = getRegistros();
+  registros.push(payload);
+  setRegistros(registros);
+  pintarContadorRegistros();
+
+  // Descarga automática del JSON acumulado actualizado,
+  // listo para ser leído por el HTML/dashboard central.
+  descargarJSON(registros, `registros_migracion_${Date.now()}.json`);
+
+  statusMsg.className = "status ok";
+  statusMsg.innerText = "✔ Registro guardado y JSON descargado con éxito.";
+
+  // Reset parcial del formulario (mantiene técnico para agilidad)
+  document.getElementById("fieldForm").reset();
+  document.getElementById("tecnico").value = tecnico;
+  document.getElementById("bloqueSi").classList.add("oculto");
+  document.getElementById("bloqueNo").classList.add("oculto");
+  document.getElementById("preview1").style.display = "none";
+  document.getElementById("preview2").style.display = "none";
+  fotos = { foto1: "", foto2: "" };
+  document.getElementById("search").value = "";
+  limpiarCamposCliente();
+});
+
+/* =========================================================
+   INICIALIZACIÓN
+   ========================================================= */
+cargarBaseDesdeRepositorio();
+pintarContadorRegistros();
+</script>
+</body>
+</html>
