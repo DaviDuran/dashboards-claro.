@@ -369,6 +369,11 @@ document.getElementById("btnLimpiarRegistros").addEventListener("click", functio
    ========================================================= */
 async function enviarAPowerAutomate(payload){
   const payloadConClave = { ...payload, clave: CLAVE_SEGURIDAD };
+  // El disparador "When a HTTP request is received" de Power Automate trae
+  // soporte de CORS integrado (responde a la petición preflight OPTIONS
+  // automáticamente), así que usamos una petición normal con
+  // Content-Type: application/json para que el esquema JSON se valide
+  // correctamente en el flujo.
   const resp = await fetch(POWER_AUTOMATE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -483,6 +488,7 @@ document.getElementById("fieldForm").addEventListener("submit", async function(e
     statusMsg.className = "status ok";
     statusMsg.innerText = "✔ Registro enviado exitosamente al sistema central.";
   } catch(err){
+    console.error("Error al enviar a Power Automate:", err);
     // Si falla (sin señal, error de red, etc.), se guarda en cola de pendientes
     const pendientes = getPendientes();
     pendientes.push(payload);
