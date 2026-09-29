@@ -194,9 +194,9 @@
       color: white;
     }
 
-    /* Savings Banner */
+    /* Savings / Strategy Banner */
     .savings-card {
-      background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
       color: white;
       padding: 22px 24px;
       border-radius: var(--radius);
@@ -246,7 +246,7 @@
       font-weight: 800;
       font-size: 1.05rem;
       text-align: right;
-      color: #6ee7b7;
+      color: #7dd3fc;
     }
 
     /* Category Filter Tabs */
@@ -519,6 +519,40 @@
       color: #92400e;
     }
 
+    /* Suboptions card inside timeline */
+    .subplan-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-top: 10px;
+    }
+
+    .subplan-box h5 {
+      font-size: 0.84rem;
+      color: #0f172a;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .subplan-list {
+      list-style: none;
+      font-size: 0.83rem;
+      color: #475569;
+    }
+
+    .subplan-list li {
+      margin-bottom: 8px;
+      padding-left: 12px;
+      border-left: 2px solid #cbd5e1;
+    }
+
+    .subplan-list li:last-child {
+      margin-bottom: 0;
+    }
+
     /* Checklist Section */
     .checklist-card {
       background: white;
@@ -661,7 +695,7 @@
   <header>
     <div class="badge-top">🌴 Viaje Familiar Miami 2026</div>
     <h1>Itinerario de Viaje</h1>
-    <p>30 de Septiembre – 6 de Octubre • 2 Días de Playa • 2 Outlets • Concierto Don Omar</p>
+    <p>30 de Septiembre – 6 de Octubre • South Beach • Zoo Miami • 2 Outlets • Concierto Don Omar</p>
   </header>
 
   <div class="container">
@@ -705,33 +739,32 @@
       </div>
     </div>
 
-    <!-- Savings Breakdown Banner -->
+    <!-- Savings / Strategy Banner (Actualizado: Cero Cargas) -->
     <div class="savings-card">
-      <h3>💡 Tip de Ahorro: Compras en Walmart vs. Alquiler en Playa</h3>
+      <h3>🏖️ Estrategia de Playa Ligera: Cero Cargas para 1 Solo Día</h3>
       <p style="font-size: 0.9rem; opacity: 0.92;">
-        Por qué compramos el kit el Miércoles para los 2 Días de Playa (South Beach + Key Biscayne):
+        Como solo iremos a la playa el Viernes en South Beach, evitamos comprar sillas voluminosas para mantener el baúl del SUV libre y no cargar peso a pie:
       </p>
       <div class="comparison-grid">
         <div class="comp-col">
-          <h5>❌ Alquilar en Playa (2 Días)</h5>
+          <h5>❌ Comprar Kit en Walmart (Inconveniente)</h5>
           <ul>
-            <li>• 4 Sillas reclinables: $80 / día</li>
-            <li>• 2 Sombrillas: $40 / día</li>
-            <li>• <strong>Gasto total estimado:</strong> $240 USD</li>
+            <li>• Ocupa medio baúl toda la semana ($85 USD)</li>
+            <li>• Cargar 4 sillas y sombrilla 3 cuadras a pie</li>
+            <li>• No cabe en el avión al volver (tocaría botarlo)</li>
           </ul>
         </div>
         <div class="comp-col">
-          <h5>✅ Comprar en Walmart (Uso Ilimitado)</h5>
+          <h5>✅ Modo Inteligente (Alquiler / Toallas)</h5>
           <ul>
-            <li>• 1 Sombrilla familiar: $15 USD</li>
-            <li>• 4 Sillas plegables: $60 USD</li>
-            <li>• 1 Neverita de icopor: $10 USD</li>
-            <li>• <strong>Inversión única:</strong> $85 USD</li>
+            <li>• <strong>Comodidad total:</strong> Llegar con manos libres</li>
+            <li>• Alquilar solo 1 sombrilla + 2 sillas (~$50-60 USD)</li>
+            <li>• Usar toallas del Airbnb para quien esté en el agua</li>
           </ul>
         </div>
       </div>
       <div class="net-savings">
-        💵 Ahorro Total para la Familia: ~$155 USD
+        ✨ Máxima Comodidad Familiar y Baúl 100% Disponible
       </div>
     </div>
 
@@ -746,13 +779,13 @@
         <button class="pill-btn" onclick="filterCategory('beach', this)">🏖️ Playas</button>
         <button class="pill-btn" onclick="filterCategory('shopping', this)">🛍️ Compras (Outlets)</button>
         <button class="pill-btn" onclick="filterCategory('concert', this)">🔥 Don Omar</button>
-        <button class="pill-btn" onclick="filterCategory('culture', this)">🎨 Arte & Gastronomía</button>
+        <button class="pill-btn" onclick="filterCategory('culture', this)">🎨 Arte & Naturaleza</button>
       </div>
     </div>
 
     <!-- DAYS LIST -->
 
-    <!-- Día 1: Miércoles 30 (Actualizado) -->
+    <!-- Día 1: Miércoles 30 -->
     <div class="day-card open" data-category="travel shopping">
       <div class="day-header" onclick="toggleCard(this)">
         <div class="day-title-wrap">
@@ -790,7 +823,7 @@
             <div class="time-slot">🍔 15:15 – 16:45</div>
             <div class="activity-title">Almuerzo en Mary Brickell Village (Shake Shack & Publix)</div>
             <div class="activity-desc">
-              Parqueo cubierto seguro en el Garage (999 SW 1st Ave). Comprar sándwich fresco o ensalada en el deli de Publix y validar el ticket para <strong>2 horas de parqueo gratis</strong>. Sentarse juntos en la terraza de Shake Shack a disfrutar hamburguesas, papas y malteadas.
+              Parqueo cubierto seguro en el Garage (999 SW 1st Ave). Comprar sándwich fresco en el deli de Publix y validar el ticket para <strong>2 horas de parqueo gratis</strong>. Sentarse juntos en la terraza de Shake Shack a disfrutar hamburguesas, papas y malteadas.
             </div>
             <div class="item-footer">
               <a class="map-btn" href="https://maps.google.com/?q=999+SW+1st+Ave,+Miami,+FL+33130" target="_blank">📍 Garage Mary Brickell</a>
@@ -815,12 +848,12 @@
             <div class="time-slot">🛒 18:15 – 20:30</div>
             <div class="activity-title">Mercado Completo en Walmart Supercenter (Doral)</div>
             <div class="activity-desc">
-              Hacer el mercado de la semana con calma y baúl vacío: desayunos, aguas por paca, frutas y snacks. Comprar también el <strong>kit de playa</strong> (sombrilla, 4 sillas y neverita). Si da hambre suave durante la compra, se puede picar algo ligero en el deli caliente o los locales de la tienda.
+              Hacer el mercado de la semana con calma y baúl vacío: desayunos, aguas por paca, frutas, café y snacks. Opcional: comprar una bolsa térmica pequeña reutilizable ($5 USD) para bebidas frías. Si da hambre suave durante la compra, se puede picar algo ligero en el deli caliente o los locales de la tienda.
             </div>
             <div class="item-footer">
               <a class="map-btn" href="https://maps.google.com/?q=Walmart+Supercenter,+8651+NW+13th+Terrace,+Doral,+FL" target="_blank">📍 Walmart Doral</a>
               <span class="cost-pill">Parqueo: $0 USD</span>
-              <span class="cost-pill">Kit Playa: ~$85 USD</span>
+              <span class="cost-pill">Mercado: Según consumo</span>
             </div>
           </li>
           <li class="timeline-item">
@@ -880,7 +913,7 @@
       </div>
     </div>
 
-    <!-- Día 3: Viernes 2 -->
+    <!-- Día 3: Viernes 2 (Actualizado: Alquiler Cómodo de Playa) -->
     <div class="day-card open" data-category="beach culture">
       <div class="day-header" onclick="toggleCard(this)">
         <div class="day-title-wrap">
@@ -891,7 +924,7 @@
           </div>
         </div>
         <div class="header-right">
-          <span class="day-tag tag-beach">🏖️ Playa #1</span>
+          <span class="day-tag tag-beach">🏖️ Día de Playa</span>
           <span class="chevron">▼</span>
         </div>
       </div>
@@ -899,12 +932,15 @@
         <ul class="timeline">
           <li class="timeline-item highlight">
             <div class="timeline-dot"></div>
-            <div class="time-slot">🏖️️ 10:00 – 13:00</div>
-            <div class="activity-title">Mañana de Playa en South Beach & Ocean Drive</div>
-            <div class="activity-desc">Disfrutar del mar turquesa con sombrilla y sillas de Walmart. Fotos en el Distrito Art Déco y Mansión Versace.</div>
+            <div class="time-slot">🏖️ 10:00 – 13:00</div>
+            <div class="activity-title">Mañana de Playa en South Beach (Cero Cargas)</div>
+            <div class="activity-desc">
+              Caminar ligeros con toallas y protector solar. En la arena se puede alquilar 1 sombrilla y 2 sillas reclinables instaladas por el operador de playa (~$50-60 USD en total). Quienes prefieran agua o paseo usan toallas en la arena. Fotos en el Distrito Art Déco y Mansión Versace.
+            </div>
             <div class="item-footer">
               <a class="map-btn" href="https://maps.google.com/?q=7th+Street+Garage,+512+7th+St,+Miami+Beach" target="_blank">📍 Parqueo 7th St Garage</a>
               <span class="cost-pill">Parqueo: ~$3/hr</span>
+              <span class="cost-pill">Alquiler Playa: ~$50-60 USD total</span>
             </div>
           </li>
           <li class="timeline-item">
@@ -943,37 +979,89 @@
         <div class="day-title-wrap">
           <div class="day-num-box">03<span>OCT</span></div>
           <div class="day-text">
-            <h3>Sábado: Ice Cream Museum, Dave's & Wynwood</h3>
-            <p>Helados interactivos, pollo frito, murales y Design District</p>
+            <h3>Sábado: Arte, Helados/Bayside, Dave's & Wynwood</h3>
+            <p>Miami Worldcenter, opciones para todos, pollo frito y murales</p>
           </div>
         </div>
         <div class="header-right">
-          <span class="day-tag tag-culture">🎨 Arte & Helado</span>
+          <span class="day-tag tag-culture">🎨 Centro & Wynwood</span>
           <span class="chevron">▼</span>
         </div>
       </div>
       <div class="day-content">
         <ul class="timeline">
+          
           <li class="timeline-item highlight">
             <div class="timeline-dot"></div>
-            <div class="time-slot">🍦 10:30 – 12:15</div>
-            <div class="activity-title">Museum of Ice Cream (Miami Worldcenter)</div>
-            <div class="activity-desc">Salas temáticas, piscina de chispitas (sprinkle pool) y helados ilimitados incluidos en la entrada.</div>
+            <div class="time-slot">🅿️ 10:15 – 10:30</div>
+            <div class="activity-title">Punto de Llegada y Parqueo Base: Miami Worldcenter Garage</div>
+            <div class="activity-desc">
+              Parqueo cubierto y central en Downtown Miami. Aquí se deja el carro y funciona como punto de encuentro para todos.
+            </div>
             <div class="item-footer">
-              <a class="map-btn" href="https://maps.google.com/?q=Museum+of+Ice+Cream,+851+NE+1st+Ave,+Miami" target="_blank">📍 Museum of Ice Cream</a>
-              <span class="cost-pill">Entrada: ~$35-45 USD/pp</span>
+              <a class="map-btn" href="https://maps.google.com/?q=Miami+Worldcenter+Garage,+150+NE+8th+St,+Miami,+FL+33132" target="_blank">📍 Garage Worldcenter</a>
+              <span class="cost-pill">Parqueo: ~$4-5/hr</span>
             </div>
           </li>
+
+          <li class="timeline-item highlight">
+            <div class="timeline-dot"></div>
+            <div class="time-slot">🍦 10:30 – 12:00 (Planes en Paralelo)</div>
+            <div class="activity-title">Mañana Dividida: Museo de Helados O Paseo Libre</div>
+            <div class="activity-desc">
+              Cada integrante elige su plan favorito durante estos 75-90 minutos sin pagar de más:
+            </div>
+
+            <!-- Subplanes desglosados -->
+            <div class="subplan-box">
+              <h5>🍧 GRUPO 1: Museum of Ice Cream</h5>
+              <p style="font-size: 0.83rem; color: #475569; margin-bottom: 6px;">
+                Para quienes deseen entrar al museo temático interactivo con sprinkle pool y degustación de helados.
+              </p>
+              <div class="item-footer" style="margin-bottom: 10px;">
+                <a class="map-btn" href="https://maps.google.com/?q=Museum+of+Ice+Cream,+851+NE+1st+Ave,+Miami" target="_blank">📍 Museum of Ice Cream</a>
+                <span class="cost-pill">Entrada: ~$35-45 USD/pp</span>
+              </div>
+
+              <h5 style="margin-top: 10px;">☕ GRUPO 2: Paseo Relajado (Costo $0 / Solo consumo)</h5>
+              <ul class="subplan-list">
+                <li>
+                  <strong>Opción A (En la misma plaza):</strong> Caminar por el boulevard peatonal de Miami Worldcenter, ver tiendas (Sephora, Ray-Ban) y tomar un buen café con crepas francesas en <em>Sweet Paris Crêperie</em>.
+                  <div style="margin-top: 4px;">
+                    <a class="map-btn" style="padding: 3px 8px; font-size: 0.74rem;" href="https://maps.google.com/?q=Sweet+Paris+Creperie,+Miami+Worldcenter" target="_blank">📍 Sweet Paris Café</a>
+                  </div>
+                </li>
+                <li>
+                  <strong>Opción B (Bayside Marketplace junto a la marina):</strong> Caminata de 8 min (o en el tren elevado gratis <em>Metromover</em>) hacia la bahía. Quioscos de recuerdos económicos, ropa playera y vista a los yates.
+                  <div style="margin-top: 4px;">
+                    <a class="map-btn" style="padding: 3px 8px; font-size: 0.74rem;" href="https://maps.google.com/?q=Bayside+Marketplace,+Miami" target="_blank">📍 Bayside Marketplace</a>
+                  </div>
+                </li>
+                <li>
+                  <strong>Opción C (Maurice A. Ferré Park):</strong> Caminar 6 min al parque costero con senderos arborizados frente al mar, vista panorámica al puerto de cruceros y brisa fresca.
+                  <div style="margin-top: 4px;">
+                    <a class="map-btn" style="padding: 3px 8px; font-size: 0.74rem;" href="https://maps.google.com/?q=Maurice+A.+Ferre+Park,+Miami" target="_blank">📍 Parque Ferré</a>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="tip-box">
+              🤝 <strong>Punto de Reencuentro (12:15 PM):</strong> En la plaza central de Miami Worldcenter (frente a las fuentes y Sweet Paris). Recogen el auto juntos para ir a almorzar.
+            </div>
+          </li>
+
           <li class="timeline-item highlight">
             <div class="timeline-dot"></div>
             <div class="time-slot">🍗 12:45 – 13:45</div>
             <div class="activity-title">Almuerzo en Dave's Hot Chicken (Wynwood)</div>
-            <div class="activity-desc">Combos de tenders al estilo Nashville con papas. (Para no picante pedir <em>No Spice</em> o <em>Lite Mild</em>).</div>
+            <div class="activity-desc">Combos de tenders al estilo Nashville con papas. (Para quienes no comen picante pedir <em>No Spice</em> o <em>Lite Mild</em>).</div>
             <div class="item-footer">
               <a class="map-btn" href="https://maps.google.com/?q=Dave's+Hot+Chicken,+2915+NW+2nd+Ave,+Miami" target="_blank">📍 Dave's Hot Chicken</a>
               <span class="cost-pill">Combo: ~$14-18 USD/pp</span>
             </div>
           </li>
+
           <li class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="time-slot">🎨 14:00 – 16:15</div>
@@ -984,6 +1072,7 @@
               <span class="cost-pill">Entrada: ~$12 USD/pp</span>
             </div>
           </li>
+
           <li class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="time-slot">🏛️ 16:30 – 18:30</div>
@@ -994,6 +1083,7 @@
               <span class="cost-pill">Acceso: Gratis</span>
             </div>
           </li>
+
           <li class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="time-slot">🍷 19:30</div>
@@ -1023,7 +1113,7 @@
         <ul class="timeline">
           <li class="timeline-item highlight">
             <div class="timeline-dot"></div>
-            <div class="time-slot">🛍️ 11:00 – 15:00</div>
+            <div class="time-slot">🛍️️ 11:00 – 15:00</div>
             <div class="activity-title">Compras en Dolphin Mall & Almuerzo</div>
             <div class="activity-desc">A solo 12 min del Airbnb. Más de 240 tiendas (Ross, Burlington, Nike Factory). Parqueo gratuito.</div>
             <div class="item-footer">
@@ -1055,17 +1145,17 @@
     </div>
 
     <!-- Día 6: Lunes 5 -->
-    <div class="day-card open" data-category="beach culture">
+    <div class="day-card open" data-category="culture">
       <div class="day-header" onclick="toggleCard(this)">
         <div class="day-title-wrap">
           <div class="day-num-box">05<span>OCT</span></div>
           <div class="day-text">
-            <h3>Lunes: Key Biscayne & Cena de Despedida</h3>
-            <p>Playa tranquila en Crandon Park, maletas y cena en Brickell</p>
+            <h3>Lunes: Zoo Miami & Alimentar Jirafas</h3>
+            <p>Jirafas, safari en Zoo Miami, maletas y cena en Brickell</p>
           </div>
         </div>
         <div class="header-right">
-          <span class="day-tag tag-beach">🏖️ Playa #2</span>
+          <span class="day-tag tag-culture">🦒 Zoo Miami</span>
           <span class="chevron">▼</span>
         </div>
       </div>
@@ -1073,25 +1163,32 @@
         <ul class="timeline">
           <li class="timeline-item highlight">
             <div class="timeline-dot"></div>
-            <div class="time-slot">🌴 10:30 – 15:00</div>
-            <div class="activity-title">Día de Playa en Crandon Park (Key Biscayne)</div>
-            <div class="activity-desc">Aguas mansas y cristalinas protegidas por arrecifes, palmeras, sombra natural y paseo al histórico faro de Cape Florida.</div>
+            <div class="time-slot">🦒 10:00 – 14:30</div>
+            <div class="activity-title">Recorrido por Zoo Miami & Samburu Giraffe Station</div>
+            <div class="activity-desc">
+              Visita al zoológico al aire libre más grande de Florida. Experiencia interactiva para alimentar a las jirafas desde la plataforma elevada ($5 USD/porción) y recorrido por los hábitats de fauna africana y asiática.
+            </div>
             <div class="item-footer">
-              <a class="map-btn" href="https://maps.google.com/?q=Crandon+Park,+Key+Biscayne" target="_blank">📍 Crandon Park</a>
-              <span class="cost-pill">Entrada Parque: ~$8 USD/carro</span>
+              <a class="map-btn" href="https://maps.google.com/?q=Zoo+Miami,+12400+SW+152nd+St,+Miami,+FL+33177" target="_blank">📍 Zoo Miami</a>
+              <span class="cost-pill">Entrada: ~$26-29 USD/adulto</span>
+              <span class="cost-pill">Jirafas: ~$5 USD</span>
+              <span class="cost-pill">Parqueo: $0 USD</span>
+            </div>
+            <div class="tip-box">
+              💡 <strong>Tip:</strong> Como el parque es muy amplio y hace calor, vayan con ropa fresca, bloqueador solar y pasen temprano por la estación de jirafas (Samburu) para asegurar su turno de alimentación.
             </div>
           </li>
           <li class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="time-slot">🧳 15:30 – 18:30</div>
             <div class="activity-title">Organización Final y Armado de Maletas</div>
-            <div class="activity-desc">Regreso al Airbnb para empacar todas las compras de la semana y pesar maletas sin apuros.</div>
+            <div class="activity-desc">Regreso al Airbnb en Little Havana para empacar todas las compras de la semana y pesar maletas sin apuros.</div>
           </li>
           <li class="timeline-item highlight">
             <div class="timeline-dot"></div>
             <div class="time-slot">✨ 19:30 – 22:00</div>
             <div class="activity-title">Paseo & Cena de Despedida en Brickell</div>
-            <div class="activity-desc">Caminar por el moderno Brickell City Centre y cena especial familiar con vistas a la bahía.</div>
+            <div class="activity-desc">Caminar por el moderno Brickell City Centre y cena especial familiar con vistas a la bahía para cerrar el viaje.</div>
             <div class="item-footer">
               <a class="map-btn" href="https://maps.google.com/?q=Brickell+City+Centre,+Miami" target="_blank">📍 Brickell City Centre</a>
               <span class="cost-pill">Cena: ~$35-50 USD/pp</span>
@@ -1182,14 +1279,19 @@
               <td><span style="color:#15803d; font-weight:700;">$0 USD (GPS sin peajes)</span></td>
             </tr>
             <tr>
-              <td><strong>Kit de Playa Walmart (2 Días de Uso)</strong></td>
-              <td>Por Grupo</td>
-              <td>$85 USD (Ahorro de $155 USD)</td>
+              <td><strong>Alquiler Opcional en Playa (South Beach)</strong></td>
+              <td>Por Grupo (1 sombrilla + 2 sillas)</td>
+              <td>~$50 – $60 USD total (o $0 con toallas)</td>
             </tr>
             <tr>
-              <td><strong>Museum of Ice Cream</strong></td>
+              <td><strong>Museum of Ice Cream (Opcional)</strong></td>
               <td>Por Persona</td>
-              <td>$35 – $45 USD</td>
+              <td>$35 – $45 USD (plan alterno en plaza: $0)</td>
+            </tr>
+            <tr>
+              <td><strong>Zoo Miami & Jirafas</strong></td>
+              <td>Por Persona</td>
+              <td>$26 – $29 USD (+$5 comida jirafas)</td>
             </tr>
             <tr>
               <td><strong>Wynwood Walls</strong></td>
